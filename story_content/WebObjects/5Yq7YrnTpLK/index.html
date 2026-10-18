@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Geocell KB 3 - EMILIE | IPA Kelas VII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fs:16pt;
+  --g900:#103d2a;
+  --g800:#14532d;
+  --g700:#1b7a4a;
+  --g500:#2f9e63;
+  --g200:#bfe3cf;
+  --g100:#e7f5ed;
+  --teal:#0f766e;
+  --bg:#f4f9f6;
+  --card:#ffffff;
+  --ink:#17261e;
+  --mut:#4a5d52;
+  --line:#d3e3d9;
+  --sky:#0369a1;
+  --skybg:#e6f3fb;
+  --amb:#b45309;
+  --ambbg:#fff3dc;
+  --red:#b42318;
+  --redbg:#fdecea;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:#dfece4;
+  color:var(--ink);
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.48;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:10px;
+}
+/* Bingkai aplikasi ukuran 830 x 920 piksel */
+.app-frame{
+  width:830px;
+  max-width:100%;
+  height:920px;
+  background:var(--bg);
+  border:2px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 10px 32px rgba(16,61,42,.14);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+.stage-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px 12px;
+  padding:12px 18px;
+  background:var(--g800);
+  color:#fff;
+  font-weight:700;
+  letter-spacing:.02em;
+  flex-shrink:0;
+}
+.stage-head h1{
+  margin:0;
+  font-size:1.08em;
+  color:#fff;
+  line-height:1.25;
+}
+.stage-head .prog-pill{
+  font-weight:600;
+  font-size:var(--fs);
+  background:rgba(255,255,255,.2);
+  border-radius:999px;
+  padding:2px 14px;
+  white-space:nowrap;
+}
+/* Kotak identitas hasil cetak (tampil saat nama diisi atau saat cetak) */
+.student-banner{
+  background:var(--g100);
+  border-bottom:2px solid var(--g200);
+  padding:8px 18px;
+  display:none;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:6px 14px;
+  font-size:var(--fs);
+  color:var(--g900);
+  flex-shrink:0;
+}
+.student-banner.show{
+  display:flex;
+}
+.scroll-area{
+  flex:1;
+  overflow-y:auto;
+  padding:12px 16px 18px;
+}
+.calc-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 16px 16px;
+  margin:0;
+  box-shadow:0 1px 3px rgba(16,61,42,.05);
+}
+.calc-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:10px 14px;
+  margin:0 0 12px;
+}
+@media(max-width:640px){
+  .calc-grid{grid-template-columns:1fr}
+}
+.calc-grid > div{
+  background:#f9fcfa;
+  border:1.5px solid #e3efe7;
+  border-radius:10px;
+  padding:8px 12px;
+}
+.calc-grid label{
+  font-size:var(--fs);
+  font-weight:700;
+  color:var(--g900);
+  display:block;
+  margin-bottom:4px;
+}
+input[type=number],input[type=text]{
+  width:100%;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  padding:6px 10px;
+  border:1.5px solid #b9d0c3;
+  border-radius:9px;
+  background:#fff;
+  color:var(--ink);
+}
+input[type=number]:focus,input[type=text]:focus,button:focus-visible,summary:focus-visible{
+  outline:3px solid #8fd4ae;
+  outline-offset:1px;
+}
+.res{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:8px 12px;
+  margin:12px 0;
+}
+@media(max-width:640px){
+  .res{grid-template-columns:1fr}
+}
+.res div{
+  background:var(--g100);
+  border:1.5px solid var(--g200);
+  border-radius:10px;
+  padding:8px 12px;
+}
+.res b{
+  display:block;
+  font-size:var(--fs);
+  color:var(--g900);
+}
+.res span{
+  display:block;
+  font-size:var(--fs);
+  color:var(--mut);
+}
+.viz{
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  text-align:center;
+  overflow-x:auto;
+  margin:10px 0;
+}
+.box{
+  border-left:6px solid var(--g500);
+  background:var(--g100);
+  border-radius:0 12px 12px 0;
+  padding:10px 14px;
+  margin:8px 0;
+  font-size:var(--fs);
+}
+.box b:first-child{
+  display:block;
+  margin-bottom:2px;
+  color:var(--g900);
+}
+.box.k3{border-color:var(--red);background:var(--redbg)}
+.box.tip{border-color:var(--amb);background:var(--ambbg)}
+.box.fakta{border-color:var(--teal);background:#e3f6f3}
+
+/* Menu Bandingkan Beberapa Ukuran Lubang Secara Otomatis */
+details.cmp-menu{
+  background:#fff;
+  border:1.5px solid var(--g500);
+  border-radius:12px;
+  margin:12px 0;
+  padding:0;
+  overflow:hidden;
+}
+details.cmp-menu > summary{
+  cursor:pointer;
+  padding:10px 16px;
+  font-weight:700;
+  font-size:var(--fs);
+  color:var(--g900);
+  background:var(--g100);
+  list-style:none;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  user-select:none;
+}
+details.cmp-menu > summary::-webkit-details-marker{display:none}
+details.cmp-menu > summary::before{
+  content:"\25B8";
+  color:var(--g700);
+  font-size:1.1em;
+  transition:transform .15s;
+}
+details.cmp-menu[open] > summary::before{
+  transform:rotate(90deg);
+}
+details.cmp-menu[open] > summary{
+  border-bottom:1.5px solid var(--g200);
+}
+.cmp-body{
+  padding:12px 14px;
+}
+.tw{
+  overflow-x:auto;
+  margin:0 0 8px;
+  border-radius:10px;
+  border:1.5px solid var(--line);
+  background:#fff;
+}
+table{
+  border-collapse:collapse;
+  width:100%;
+  font-size:var(--fs);
+  min-width:680px;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:8px 10px;
+  vertical-align:top;
+  text-align:left;
+}
+th{
+  background:var(--g100);
+  color:var(--g900);
+  font-weight:700;
+}
+tr:nth-child(even) td{
+  background:#fbfdfb;
+}
+tr.active-row td{
+  background:#e1f5e8!important;
+  font-weight:700;
+  color:var(--g900);
+}
+tr.cmp-row{
+  cursor:pointer;
+  transition:background .12s;
+}
+tr.cmp-row:hover td{
+  background:var(--skybg);
+}
+.small{
+  font-size:var(--fs);
+  color:var(--mut);
+  margin:6px 0 0;
+}
+
+.btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:14px 0 4px;
+  align-items:center;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--g700);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:9px 16px;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s,opacity .15s;
+}
+.btn:hover{background:var(--g800)}
+.btn.sec{
+  background:#fff;
+  color:var(--g800);
+  border:1.5px solid var(--g500);
+}
+.btn.sec:hover{background:var(--g100)}
+.btn.prt{
+  background:var(--sky);
+  color:#fff;
+}
+.btn.prt:hover{background:#075985}
+
+/* Modal Input Nama Murid Sebelum Cetak */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(16,61,42,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:100;
+}
+.modal-backdrop.open{
+  display:flex;
+}
+.modal-card{
+  background:#fff;
+  border:2px solid var(--g500);
+  border-radius:16px;
+  width:100%;
+  max-width:520px;
+  padding:18px 20px;
+  box-shadow:0 16px 40px rgba(0,0,0,.28);
+}
+.modal-card h2{
+  margin:0 0 8px;
+  font-size:1.1em;
+  color:var(--g900);
+}
+.modal-card p{
+  margin:0 0 10px;
+  font-size:var(--fs);
+}
+.modal-fld{
+  margin:8px 0;
+}
+.modal-fld label{
+  display:block;
+  font-weight:700;
+  margin-bottom:4px;
+  color:var(--g900);
+}
+.modal-err{
+  display:none;
+  color:var(--red);
+  background:var(--redbg);
+  border-left:4px solid var(--red);
+  padding:8px 12px;
+  border-radius:6px;
+  margin-top:8px;
+  font-weight:600;
+}
+.modal-err.show{display:block}
+
+@media print{
+  @page{size:A4 portrait;margin:10mm}
+  :root{
+    --fs:11pt;
+  }
+  html,body{
+    background:#fff!important;
+    padding:0!important;
+    height:auto!important;
+    overflow:visible!important;
+    font-size:11pt!important;
+    line-height:1.35!important;
+  }
+  .app-frame{
+    width:100%!important;
+    height:auto!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .stage-head{
+    padding:8px 12px!important;
+    border-radius:8px!important;
+  }
+  .stage-head h1{
+    font-size:13pt!important;
+  }
+  .stage-head .prog-pill,
+  .student-banner,
+  .calc-grid label,
+  input[type=number],
+  input[type=text],
+  .res b,
+  .res span,
+  .box,
+  details.cmp-menu > summary,
+  table,
+  .small{
+    font-size:10.5pt!important;
+    line-height:1.35!important;
+  }
+  .scroll-area{
+    overflow:visible!important;
+    padding:6px 0!important;
+  }
+  .calc-card{
+    padding:10px 12px!important;
+  }
+  .calc-grid{
+    gap:6px 10px!important;
+    margin-bottom:8px!important;
+  }
+  .calc-grid > div{
+    padding:5px 8px!important;
+  }
+  input[type=number]{
+    padding:3px 6px!important;
+  }
+  .res{
+    gap:6px 10px!important;
+    margin:8px 0!important;
+  }
+  .res div{
+    padding:5px 8px!important;
+  }
+  .viz{
+    padding:6px!important;
+    margin:6px 0!important;
+  }
+  .viz svg{
+    max-height:190px!important;
+  }
+  .box{
+    padding:6px 10px!important;
+    margin:6px 0!important;
+  }
+  details.cmp-menu > *{
+    display:block!important;
+  }
+  .tw{
+    overflow:visible!important;
+  }
+  table{
+    min-width:0!important;
+  }
+  th,td{
+    padding:4px 6px!important;
+  }
+  .student-banner{
+    display:flex!important;
+    border:1.5px solid var(--g700)!important;
+    border-radius:8px;
+    margin:6px 0;
+    padding:6px 12px!important;
+  }
+  .noprint,.btns,.modal-backdrop{
+    display:none!important;
+  }
+  .calc-grid > div,.res div,.viz,.box,details.cmp-menu{
+    break-inside:avoid;
+  }
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app-frame" role="main">
+  <header class="stage-head">
+    <h1>KALKULATOR GEOCELL &mdash; KB 3</h1>
+    <span class="prog-pill" id="pillSummary">Panel: 37 &times; 30 cm (20 sel)</span>
+  </header>
+
+  <div class="student-banner" id="studentBanner">
+    <div><b>Nama Murid:</b> <span id="outNama">-</span></div>
+    <div id="wrapKelas"><b>Kelas / Kelompok:</b> <span id="outKelas">-</span></div>
+    <div><b>Waktu Cetak:</b> <span id="outWaktu">-</span></div>
+  </div>
+
+  <div class="scroll-area" id="scrollArea">
+    <div class="calc-card" id="geocalc">
+      <div class="calc-grid">
+        <div>
+          <label for="gc-P">P: panjang maks. panel (cm)</label>
+          <input type="number" id="gc-P" value="40" min="8" max="60" step="1">
+        </div>
+        <div>
+          <label for="gc-L">L: lebar maks. panel (cm)</label>
+          <input type="number" id="gc-L" value="30" min="8" max="60" step="1">
+        </div>
+        <div>
+          <label for="gc-d">d: diameter rumpun rumput (cm)</label>
+          <input type="number" id="gc-d" value="3.5" min="1" max="9" step="0.5">
+        </div>
+        <div>
+          <label for="gc-a">a: sisi lubang sel (cm)</label>
+          <input type="number" id="gc-a" value="5" min="2" max="10" step="0.5">
+        </div>
+        <div>
+          <label for="gc-s">s: lebar pita/simpul (cm)</label>
+          <input type="number" id="gc-s" value="2" min="1" max="5" step="0.5">
+        </div>
+        <div>
+          <label for="gc-r">Cadangan bahan (%)</label>
+          <input type="number" id="gc-r" value="20" min="0" max="100" step="5">
+        </div>
+        <div style="grid-column: 1 / -1">
+          <label for="gc-k">Panjang pita dari 1 kemasan (cm)</label>
+          <input type="number" id="gc-k" value="60" min="10" max="400" step="5">
+        </div>
+      </div>
+
+      <div class="res" id="gc-res" aria-live="polite"></div>
+      <div class="viz" id="gc-viz"></div>
+      <div id="gc-note"></div>
+
+      <!-- Menu Bandingkan Beberapa Ukuran Lubang Secara Otomatis -->
+      <details class="cmp-menu" id="cmpMenu">
+        <summary>Bandingkan beberapa ukuran lubang secara otomatis</summary>
+        <div class="cmp-body">
+          <div class="tw" id="gc-cmp"></div>
+          <p class="small">Perhatikan: jika lubang makin besar, jumlah simpul makin sedikit tetapi tanah di dalamnya lebih mudah tergerus air. Pilihlah ukuran yang paling seimbang antara ruang tumbuh rumput dan kekuatan menahan tanah! (Ketuk baris tabel untuk memilih ukuran <b>a</b> tersebut.)</p>
+        </div>
+      </details>
+
+      <div class="btns noprint">
+        <button type="button" class="btn sec" id="btnReset">Atur Ulang</button>
+        <button type="button" class="btn prt" id="btnPrint">&#128424; Cetak ke PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tulis Nama Murid sebelum Cetak ke PDF -->
+<div class="modal-backdrop" id="printModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <h2 id="modalTitle">Cetak Rancangan &amp; Perhitungan Geocell ke PDF</h2>
+    <p>Tuliskan nama lengkapmu terlebih dahulu agar tercetak pada lembar hasil perhitungan Kalkulator Geocell.</p>
+    <div class="modal-fld">
+      <label for="inpNama">Nama Murid <span style="color:var(--red)">*</span></label>
+      <input type="text" id="inpNama" placeholder="Ketik nama lengkapmu..." autocomplete="name">
+    </div>
+    <div class="modal-fld">
+      <label for="inpKelas">Kelas / Kelompok (opsional)</label>
+      <input type="text" id="inpKelas" placeholder="Contoh: VII A / Kelompok 2">
+    </div>
+    <div class="modal-err" id="modalErr">Harap tuliskan namamu terlebih dahulu sebelum melanjutkan mencetak!</div>
+    <div class="btns" style="justify-content:flex-end;margin-top:14px">
+      <button type="button" class="btn sec" id="btnCancelPrint">Batal</button>
+      <button type="button" class="btn prt" id="btnConfirmPrint">&#128424; Lanjutkan Cetak PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const DEFAULTS = {
+    'gc-P': '40',
+    'gc-L': '30',
+    'gc-d': '3.5',
+    'gc-a': '5',
+    'gc-s': '2',
+    'gc-r': '20',
+    'gc-k': '60'
+  };
+
+  const pillSummary = document.getElementById('pillSummary');
+  const printModal = document.getElementById('printModal');
+  const inpNama = document.getElementById('inpNama');
+  const inpKelas = document.getElementById('inpKelas');
+  const modalErr = document.getElementById('modalErr');
+  const studentBanner = document.getElementById('studentBanner');
+  const outNama = document.getElementById('outNama');
+  const outKelas = document.getElementById('outKelas');
+  const wrapKelas = document.getElementById('wrapKelas');
+  const outWaktu = document.getElementById('outWaktu');
+  const cmpEl = document.getElementById('gc-cmp');
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+    });
+  }
+
+  function num(v){
+    const x = parseFloat(String(v).replace(',', '.'));
+    return isFinite(x) ? x : NaN;
+  }
+
+  function fmt(x, d){
+    if (!isFinite(x)) return '-';
+    d = d == null ? 1 : d;
+    const r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+    let s = r.toFixed(d);
+    if (s.indexOf('.') > -1) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    const p = s.split('.');
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return p.join(',');
+  }
+
+  function pinwheelNodeSVG(x, y, st){
+    const h = st / 2;
+    return '<g stroke="#7a2e0e" stroke-width=".55">' +
+      '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + h.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="#e63946"/>' +
+      '<rect x="' + (x + h).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + h.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="#f4a261"/>' +
+      '<rect x="' + (x + h).toFixed(1) + '" y="' + (y + h).toFixed(1) + '" width="' + h.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="#2a9d8f"/>' +
+      '<rect x="' + x.toFixed(1) + '" y="' + (y + h).toFixed(1) + '" width="' + h.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="#e9c46a"/>' +
+      '<path d="M' + x.toFixed(1) + ',' + (y + h).toFixed(1) + ' H' + (x + st).toFixed(1) + ' M' + (x + h).toFixed(1) + ',' + y.toFixed(1) + ' V' + (y + st).toFixed(1) + '" stroke="#fff" stroke-width=".7"/>' +
+      '</g>';
+  }
+
+  function latticeSVG(np, nl, a, s, o){
+    o = o || {};
+    const Pp = np * a + (np + 1) * s, Lp = nl * a + (nl + 1) * s;
+    const sc = o.sc || Math.min(540 / Pp, 250 / Lp), m = o.m == null ? 38 : o.m;
+    const W = Pp * sc, H = Lp * sc, pitch = (a + s) * sc, st = s * sc;
+    let x = '<svg viewBox="0 0 ' + (W + 2 * m) + ' ' + (H + 2 * m) + '" style="max-width:100%;height:auto" role="img" aria-label="' + esc(o.aria || 'Pratinjau anyaman baling-baling Geocell') + '">';
+    x += '<rect x="' + m + '" y="' + m + '" width="' + W + '" height="' + H + '" fill="' + (o.hole || '#cde9d4') + '"/>';
+    for (let j = 0; j <= nl; j++){
+      const py = m + j * pitch;
+      for (let i = 0; i < np; i++){
+        const px = m + i * pitch + st, w = a * sc;
+        x += '<rect x="' + px.toFixed(1) + '" y="' + py.toFixed(1) + '" width="' + (w / 2).toFixed(1) + '" height="' + st.toFixed(1) + '" fill="#f4a261" stroke="#a37b1a" stroke-width=".55"/>';
+        x += '<rect x="' + (px + w / 2).toFixed(1) + '" y="' + py.toFixed(1) + '" width="' + (w / 2).toFixed(1) + '" height="' + st.toFixed(1) + '" fill="#e9c46a" stroke="#a37b1a" stroke-width=".55"/>';
+        x += '<line x1="' + px.toFixed(1) + '" y1="' + (py + st / 2).toFixed(1) + '" x2="' + (px + w).toFixed(1) + '" y2="' + (py + st / 2).toFixed(1) + '" stroke="#8a5a12" stroke-width=".5" stroke-dasharray="2 2"/>';
+      }
+    }
+    for (let i = 0; i <= np; i++){
+      const px = m + i * pitch;
+      for (let j = 0; j < nl; j++){
+        const py = m + j * pitch + st, h = a * sc;
+        x += '<rect x="' + px.toFixed(1) + '" y="' + py.toFixed(1) + '" width="' + st.toFixed(1) + '" height="' + (h / 2).toFixed(1) + '" fill="#2a9d8f" stroke="#1b5e56" stroke-width=".55"/>';
+        x += '<rect x="' + px.toFixed(1) + '" y="' + (py + h / 2).toFixed(1) + '" width="' + st.toFixed(1) + '" height="' + (h / 2).toFixed(1) + '" fill="#e63946" stroke="#8a1c24" stroke-width=".55"/>';
+        x += '<line x1="' + (px + st / 2).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (px + st / 2).toFixed(1) + '" y2="' + (py + h).toFixed(1) + '" stroke="#143d38" stroke-width=".5" stroke-dasharray="2 2"/>';
+      }
+    }
+    for (let i = 0; i <= np; i++){
+      for (let j = 0; j <= nl; j++){
+        x += pinwheelNodeSVG(m + i * pitch, m + j * pitch, st);
+      }
+    }
+    if (o.grass){
+      for (let i = 0; i < np; i++){
+        for (let j = 0; j < nl; j++){
+          const cx = m + i * pitch + st + a * sc / 2, cy = m + j * pitch + st + a * sc / 2, g = Math.min(a * sc * 0.34, 13);
+          let d = '';
+          for (let q = 0; q < 6; q++){
+            const an = q * Math.PI / 3 + 0.3;
+            d += 'M' + cx + ',' + cy + ' l' + (Math.cos(an) * g).toFixed(1) + ',' + (Math.sin(an) * g).toFixed(1) + ' ';
+          }
+          x += '<path d="' + d + '" stroke="#1b7a4a" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="' + cx + '" cy="' + cy + '" r="1.8" fill="#14532d"/>';
+        }
+      }
+    }
+    if (o.dims){
+      x += '<text x="' + (m + W / 2) + '" y="' + (m - 12) + '" text-anchor="middle" font-size="15" font-weight="700" fill="#17261e" font-family="\'Noto Serif\',Georgia,serif">P\u2032 = ' + fmt(Pp, 1) + ' cm</text>';
+      x += '<text transform="translate(' + (m - 14) + ',' + (m + H / 2) + ') rotate(-90)" text-anchor="middle" font-size="15" font-weight="700" fill="#17261e" font-family="\'Noto Serif\',Georgia,serif">L\u2032 = ' + fmt(Lp, 1) + ' cm</text>';
+      x += '<text x="' + (m + W / 2) + '" y="' + (m + H + 26) + '" text-anchor="middle" font-size="14" fill="#4a5d52" font-family="\'Noto Serif\',Georgia,serif">lubang sel ' + fmt(a, 1) + ' \u00d7 ' + fmt(a, 1) + ' cm; simpul baling-baling ' + fmt(s, 1) + ' cm; hijau = rumput</text>';
+    }
+    return x + '</svg>';
+  }
+
+  function geoCalc(){
+    const g = function(id){ return num(document.getElementById(id).value); };
+    const P = g('gc-P'), L = g('gc-L'), d = g('gc-d'), a = g('gc-a'), s = g('gc-s'), r = g('gc-r'), k = g('gc-k');
+    const res = document.getElementById('gc-res');
+    const viz = document.getElementById('gc-viz');
+    const note = document.getElementById('gc-note');
+
+    if (!(P > 0 && L > 0 && a > 0 && s > 0)){
+      res.innerHTML = '<div style="grid-column:1/-1"><b>Masukan belum lengkap</b><span>Isi P, L, a, dan s dengan angka lebih dari 0.</span></div>';
+      viz.innerHTML = '';
+      note.innerHTML = '';
+      cmpEl.innerHTML = '';
+      pillSummary.textContent = 'Periksa ukuran input';
+      return;
+    }
+
+    const calc = function(a2){
+      const np = Math.floor((P - s) / (a2 + s) + 1e-9);
+      const nl = Math.floor((L - s) / (a2 + s) + 1e-9);
+      if (np < 1 || nl < 1) return null;
+      const Pp = np * a2 + (np + 1) * s;
+      const Lp = nl * a2 + (nl + 1) * s;
+      const N = np * nl;
+      const S = (np + 1) * (nl + 1);
+      const area = Pp * Lp;
+      const open = N * a2 * a2 / area * 100;
+      const strips = (nl + 1) * Pp + (np + 1) * Lp;
+      const withR = strips * (1 + (isFinite(r) ? r : 0) / 100);
+      const pack = k > 0 ? Math.ceil(withR / k - 1e-9) : NaN;
+      return {np: np, nl: nl, Pp: Pp, Lp: Lp, N: N, S: S, area: area, open: open, strips: strips, withR: withR, pack: pack};
+    };
+
+    const c = calc(a);
+    if (!c){
+      res.innerHTML = '<div style="grid-column:1/-1"><b>Panel terlalu kecil</b><span>Panel terlalu kecil untuk satu lubang sel. Perbesar P atau L, atau kecilkan a dan s.</span></div>';
+      viz.innerHTML = '';
+      note.innerHTML = '';
+      cmpEl.innerHTML = '';
+      pillSummary.textContent = 'Panel terlalu kecil';
+      return;
+    }
+
+    pillSummary.textContent = 'Panel: ' + fmt(c.Pp, 1) + ' \u00d7 ' + fmt(c.Lp, 1) + ' cm (' + c.N + ' sel)';
+
+    const card = function(b, t){ return '<div><b>' + b + '</b><span>' + t + '</span></div>'; };
+    res.innerHTML =
+      card(c.np + ' \u00d7 ' + c.nl + ' = ' + c.N, 'Jumlah lubang sel (sisi panjang \u00d7 sisi lebar)') +
+      card((c.np + 1) + ' \u00d7 ' + (c.nl + 1) + ' = ' + c.S, 'Simpul baling-baling (' + (4 * c.S) + ' pita lipat dasar)') +
+      card(fmt(c.Pp, 1) + ' \u00d7 ' + fmt(c.Lp, 1) + ' cm', 'Ukuran panel jadi (P\u2032 \u00d7 L\u2032)') +
+      card(fmt(c.area, 0) + ' cm\u00b2', 'Luas panel') +
+      card(fmt(c.open, 1) + '%', 'Luas terbuka') +
+      card((c.nl + 1) + ' \u00d7 ' + fmt(c.Pp, 1) + ' cm', 'Jalur pita sejajar sisi panjang') +
+      card((c.np + 1) + ' \u00d7 ' + fmt(c.Lp, 1) + ' cm', 'Jalur pita sejajar sisi lebar') +
+      card(fmt(c.strips, 0) + ' cm', 'Panjang pita ekivalen') +
+      card(fmt(c.withR, 0) + ' cm', 'Dengan cadangan ' + (isFinite(r) ? r : 0) + '%') +
+      card(isFinite(c.pack) ? c.pack + ' kemasan' : '-', 'Kebutuhan kemasan plastik') +
+      card(c.N + ' rumpun', 'Rumput (1 per lubang sel, tambah cadangan)');
+
+    viz.innerHTML = latticeSVG(c.np, c.nl, a, s, {
+      grass: true,
+      dims: true,
+      aria: 'Pratinjau anyaman baling-baling Geocell dengan ' + c.N + ' lubang sel dan ' + c.S + ' simpul'
+    });
+
+    const w = [];
+    if (isFinite(d) && d > 0){
+      if (a <= d){
+        w.push('<div class="box k3"><b>Peringatan Biologis (Faktor Pembatas Ruang):</b> Sisi lubang sel a (' + fmt(a, 1) + ' cm) \u2264 diameter rumpun d (' + fmt(d, 1) + ' cm). Pangkal batang dan akar serabut rumput akan terjepit pita lipat anyaman sehingga menghambat pertumbuhan. Perbesar nilai a!</div>');
+      } else if (a < d + 1){
+        w.push('<div class="box tip"><b>Perhatian Ruang Tumbuh:</b> Selisih sisi lubang sel dan rumpun hanya ' + fmt(a - d, 1) + ' cm (&lt; 1 cm). Disarankan a \u2265 ' + fmt(d + 1, 1) + ' cm agar anakan rumput leluasa menjalar.</div>');
+      } else {
+        w.push('<div class="box fakta"><b>Evaluasi Trade-off Biologis &amp; Teknis:</b> Ruang tumbuh memadai (selisih a \u2212 d = +' + fmt(a - d, 1) + ' cm). Ingat: P dan L adalah batas maksimum bak; sistem membulatkan jumlah lubang ke bawah (n = \u230a(P\u2212s)\u00f7(a+s)\u230b) agar sel tetap utuh, sehingga ukuran panel jadi P\u2032 \u00d7 L\u2032 (' + fmt(c.Pp, 1) + ' \u00d7 ' + fmt(c.Lp, 1) + ' cm) dapat lebih kecil dari P \u00d7 L.</div>');
+      }
+    }
+    if (a < 4 || a > 7){
+      w.push('<div class="box tip"><b>Peringatan Batasan Proyek:</b> Ukuran lubang a (' + fmt(a, 1) + ' cm) berada di luar rentang batasan proyek (4\u20137 cm). Bila a &lt; 4 cm bahan plastik boros dan menghambat rumput; bila a &gt; 7 cm kurungan sel terlalu lebar sehingga tanah mudah tererosi.</div>');
+    }
+    if (P > 40 || L > 30){
+      w.push('<div class="box tip"><b>Catatan Ukuran Panel:</b> Ukuran maksimum panel yang disarankan sekitar 40 \u00d7 30 cm.</div>');
+    }
+    if (s < 1.5 || s > 3){
+      w.push('<div class="box tip"><b>Catatan Lebar Pita:</b> Lebar pita lipat/simpul baling-baling yang disarankan sekitar 1,5\u20133 cm (umumnya 2 cm).</div>');
+    }
+    note.innerHTML = w.join('');
+
+    // Tabel perbandingan otomatis beberapa ukuran lubang sel (a)
+    const list = [3, 4, 5, 6, 7];
+    if (list.indexOf(a) < 0){
+      list.push(a);
+      list.sort(function(x, y){ return x - y; });
+    }
+    let t = '<table><thead><tr>' +
+      '<th>a (cm)</th>' +
+      '<th>Jumlah lubang (N)</th>' +
+      '<th>Simpul baling-baling (S)</th>' +
+      '<th>Panel jadi (cm)</th>' +
+      '<th>Luas terbuka</th>' +
+      '<th>Total pita + cadangan (cm)</th>' +
+      '<th>Kemasan</th>' +
+      '<th>Status Ruang Rumpun (d = ' + (isFinite(d) ? fmt(d, 1) : '-') + ' cm)</th>' +
+      '</tr></thead><tbody>';
+
+    list.forEach(function(a2){
+      const q = calc(a2);
+      const st = (!isFinite(d) || d <= 0)
+        ? '-'
+        : (a2 <= d
+            ? 'Sempit/Terjepit (a \u2264 d)'
+            : (a2 < d + 1
+                ? 'Cukup Rapat'
+                : (a2 > 7 ? 'Rawan Erosi (&gt;7 cm)' : 'Optimal (Layak)')));
+      if (q){
+        t += '<tr class="cmp-row' + (a2 === a ? ' active-row' : '') + '" data-a="' + a2 + '" title="Klik untuk memilih a = ' + fmt(a2, 1) + ' cm">' +
+          '<td>' + fmt(a2, 1) + (a2 === a ? ' \u2713' : '') + '</td>' +
+          '<td>' + q.N + ' (' + q.np + ' \u00d7 ' + q.nl + ')</td>' +
+          '<td>' + q.S + '</td>' +
+          '<td>' + fmt(q.Pp, 1) + ' \u00d7 ' + fmt(q.Lp, 1) + '</td>' +
+          '<td>' + fmt(q.open, 1) + '%</td>' +
+          '<td>' + fmt(q.withR, 0) + '</td>' +
+          '<td>' + (isFinite(q.pack) ? q.pack : '-') + '</td>' +
+          '<td>' + st + '</td>' +
+          '</tr>';
+      } else {
+        t += '<tr><td>' + fmt(a2, 1) + '</td><td colspan="7">terlalu besar untuk panel ini</td></tr>';
+      }
+    });
+    t += '</tbody></table>';
+    cmpEl.innerHTML = t;
+  }
+
+  cmpEl.addEventListener('click', function(e){
+    const tr = e.target.closest('tr.cmp-row[data-a]');
+    if (!tr) return;
+    document.getElementById('gc-a').value = tr.dataset.a;
+    geoCalc();
+  });
+
+  function resetCalc(){
+    Object.keys(DEFAULTS).forEach(function(id){
+      document.getElementById(id).value = DEFAULTS[id];
+    });
+    geoCalc();
+    document.getElementById('scrollArea').scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function openPrintModal(){
+    modalErr.classList.remove('show');
+    printModal.classList.add('open');
+    setTimeout(function(){ inpNama.focus(); }, 50);
+  }
+
+  function closePrintModal(){
+    printModal.classList.remove('open');
+  }
+
+  function confirmPrint(){
+    const nama = inpNama.value.trim();
+    const kelas = inpKelas.value.trim();
+    if (!nama){
+      modalErr.classList.add('show');
+      inpNama.focus();
+      return;
+    }
+    outNama.textContent = nama;
+    if (kelas){
+      outKelas.textContent = kelas;
+      wrapKelas.style.display = '';
+    } else {
+      wrapKelas.style.display = 'none';
+    }
+    outWaktu.textContent = new Date().toLocaleString('id-ID', {
+      day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+    });
+    studentBanner.classList.add('show');
+    closePrintModal();
+    setTimeout(function(){ window.print(); }, 150);
+  }
+
+  document.getElementById('geocalc').addEventListener('input', geoCalc);
+  document.getElementById('btnReset').addEventListener('click', resetCalc);
+  document.getElementById('btnPrint').addEventListener('click', openPrintModal);
+  document.getElementById('btnCancelPrint').addEventListener('click', closePrintModal);
+  document.getElementById('btnConfirmPrint').addEventListener('click', confirmPrint);
+
+  inpNama.addEventListener('input', function(){
+    if (inpNama.value.trim()) modalErr.classList.remove('show');
+  });
+  printModal.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closePrintModal();
+    else if (e.key === 'Enter'){
+      e.preventDefault();
+      confirmPrint();
+    }
+  });
+
+  geoCalc();
+})();
+</script>
+</body>
+</html>

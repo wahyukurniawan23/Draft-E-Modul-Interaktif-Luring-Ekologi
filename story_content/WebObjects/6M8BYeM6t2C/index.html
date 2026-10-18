@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jelajah Ekosistem Lereng - EMILIE | IPA Kelas VII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fs:16pt;
+  --g900:#103d2a;
+  --g800:#14532d;
+  --g700:#1b7a4a;
+  --g500:#2f9e63;
+  --g200:#bfe3cf;
+  --g100:#e7f5ed;
+  --bg:#f4f9f6;
+  --card:#ffffff;
+  --ink:#17261e;
+  --mut:#42544a;
+  --line:#d3e3d9;
+  --sky:#0369a1;
+  --skybg:#e6f3fb;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100vh;
+  background:#dfece4;
+  color:var(--ink);
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.38;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:8px;
+}
+/* Bingkai rasio 16:9 dengan ukuran proporsional agar seluruh teks 16pt dan gambar terlihat jelas */
+.stage-16x9{
+  width:1120px;
+  max-width:100%;
+  aspect-ratio:16 / 9;
+  background:var(--bg);
+  border:2px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 8px 28px rgba(16,61,42,.14);
+  padding:10px 14px;
+  display:flex;
+  flex-direction:column;
+}
+.act{
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-top:5px solid var(--g500);
+  border-radius:12px;
+  padding:10px 16px 12px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-height:0;
+}
+.head-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px 12px;
+  border-bottom:1.5px solid var(--line);
+  padding-bottom:6px;
+  flex-shrink:0;
+}
+.title-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+}
+.act h3{
+  margin:0;
+  font-size:var(--fs);
+  line-height:1.25;
+  color:var(--g900);
+}
+.tag{
+  background:var(--g100);
+  border:1px solid var(--g200);
+  color:var(--g800);
+  border-radius:999px;
+  padding:1px 12px;
+  font-size:var(--fs);
+  line-height:1.25;
+  font-weight:600;
+}
+.tag.b{
+  background:var(--skybg);
+  border-color:#b6dcf2;
+  color:var(--sky);
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:#fff;
+  color:var(--g800);
+  border:1.5px solid var(--g500);
+  border-radius:9px;
+  padding:3px 14px;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.25;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn:hover{
+  background:var(--g100);
+}
+.btn:focus-visible{
+  outline:3px solid #8fd4ae;
+  outline-offset:1px;
+}
+/* Petunjuk utama membentang penuh di atas agar hanya 2 baris dan tidak memotong ruang penjelasan */
+p.lead{
+  margin:0;
+  font-size:var(--fs);
+  line-height:1.36;
+  color:var(--ink);
+  background:#f4fbf7;
+  border-left:5px solid var(--g500);
+  padding:5px 12px;
+  border-radius:0 8px 8px 0;
+  flex-shrink:0;
+}
+/* Tata letak 2 kolom di dalam 16:9: kiri gambar besar (57%), kanan status & penjelasan (43%) */
+.viz-row{
+  flex:1;
+  display:grid;
+  grid-template-columns:57% 43%;
+  gap:12px;
+  min-height:0;
+  align-items:stretch;
+}
+.viz{
+  background:#e8f5fd;
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  padding:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+  overflow:hidden;
+}
+#hsvg{
+  width:100%;
+  height:100%;
+  display:block;
+  border-radius:8px;
+}
+.side-panel{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-height:0;
+  padding-right:2px;
+}
+.count-pill{
+  margin:0;
+  padding:5px 12px;
+  background:var(--skybg);
+  border:1.5px solid #b6dcf2;
+  border-radius:9px;
+  font-size:var(--fs);
+  line-height:1.3;
+  font-weight:700;
+  color:var(--sky);
+  flex-shrink:0;
+}
+.cm-info{
+  margin:0;
+  padding:10px 14px;
+  border-radius:11px;
+  background:var(--g100);
+  border:1.5px solid var(--g200);
+  border-left:6px solid var(--g700);
+  flex:1;
+  font-size:var(--fs);
+  line-height:1.4;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  overflow-y:auto;
+}
+.hs{
+  cursor:pointer;
+  outline:none;
+}
+.hs .hit{
+  fill:rgba(255,255,255,0);
+  stroke:none;
+  transition:fill .15s,stroke .15s;
+}
+.hs:hover .hit,.hs:focus .hit{
+  fill:rgba(255,255,255,.28);
+  stroke:#14532d;
+  stroke-width:2.2;
+  stroke-dasharray:5 3;
+}
+.hs.seen .hit{
+  stroke:#15803d;
+  stroke-width:2.2;
+  stroke-dasharray:none;
+  fill:rgba(255,255,255,.12);
+}
+.hs.active .hit{
+  stroke:#0369a1;
+  stroke-width:3;
+  stroke-dasharray:none;
+  fill:rgba(255,255,255,.28);
+}
+.pin{
+  fill:#103d2a;
+  stroke:#fff;
+  stroke-width:1.8;
+}
+.hs.seen .pin{
+  fill:#1b7a4a;
+}
+.hs.active .pin{
+  fill:#0369a1;
+  stroke:#fde047;
+  stroke-width:2.2;
+}
+.pin-num{
+  fill:#fff;
+  font-family:'Noto Serif',Georgia,serif;
+  font-size:13px;
+  font-weight:700;
+  text-anchor:middle;
+  dominant-baseline:central;
+  pointer-events:none;
+}
+.bdg{
+  display:inline-block;
+  border-radius:999px;
+  padding:1px 11px;
+  font-size:var(--fs);
+  line-height:1.25;
+  font-weight:700;
+  color:#fff;
+  vertical-align:middle;
+  margin-left:4px;
+}
+.bdg.bio{background:#1b7a4a}
+.bdg.abi{background:#0369a1}
+@media (max-width:860px){
+  .stage-16x9{
+    aspect-ratio:auto;
+    height:auto;
+  }
+  .viz-row{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+<main class="stage-16x9" aria-label="Simulasi Interaktif Jelajah Ekosistem Lereng">
+  <div class="act" id="jelajah">
+    <div class="head-row">
+      <div class="title-wrap">
+        <h3>Jelajah Ekosistem Lereng</h3>
+        <span class="tag">sekitar 5 menit</span>
+        <span class="tag b">Interaktif</span>
+      </div>
+      <button type="button" class="btn" id="btnReset" title="Ulangi penjelajahan">&#8635; Ulangi</button>
+    </div>
+
+    <p class="lead">
+      Ketuk atau klik setiap objek pada gambar lereng. Tebak lebih dulu: <b>termasuk komponen biotik atau abiotik?</b> Jika biotik, apa perannya? Lalu baca penjelasannya!
+    </p>
+
+    <div class="viz-row">
+      <div class="viz">
+        <svg id="hsvg" viewBox="0 0 720 430" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Ekosistem lereng: ketuk objek untuk menjelajah">
+          <defs>
+            <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#cbe7fb"/>
+              <stop offset="100%" stop-color="#e8f5fd"/>
+            </linearGradient>
+            <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10z" fill="#3b6982"/>
+            </marker>
+          </defs>
+
+          <!-- Langit & siluet bukit belakang -->
+          <rect width="720" height="430" fill="url(#skyG)"/>
+          <path d="M0,210 Q170,125 355,195 T720,248 L720,430 L0,430 Z" fill="#b7dfc5" opacity="0.5"/>
+
+          <!-- Lapisan lereng -->
+          <polygon points="0,275 720,400 720,430 0,430" fill="#7c838a"/>
+          <path d="M60,335 l34,-11 M205,365 l30,-12 M415,388 l32,-9 M560,408 l26,-7 M130,395 l28,-9" stroke="#575d63" stroke-width="3.5" stroke-linecap="round"/>
+          <polygon points="0,222 720,348 720,400 0,275" fill="#a87444"/>
+          <polygon points="0,192 720,318 720,348 0,222" fill="#5a3a1f"/>
+
+          <!-- 1. Matahari -->
+          <g class="hs" tabindex="0" role="button" aria-label="Matahari" data-t="Matahari" data-k="Abiotik" data-r="" data-i="Sumber cahaya dan panas. Cahayanya menjadi energi untuk fotosintesis, dan panasnya memengaruhi suhu serta penguapan air.">
+            <circle class="hit" cx="74" cy="64" r="50"/>
+            <g stroke="#f0b429" stroke-width="3.5" stroke-linecap="round">
+              <line x1="110" y1="64" x2="123" y2="64"/>
+              <line x1="99" y1="89" x2="108" y2="98"/>
+              <line x1="74" y1="100" x2="74" y2="113"/>
+              <line x1="49" y1="89" x2="40" y2="98"/>
+              <line x1="38" y1="64" x2="25" y2="64"/>
+              <line x1="49" y1="39" x2="40" y2="30"/>
+              <line x1="74" y1="28" x2="74" y2="15"/>
+              <line x1="99" y1="39" x2="108" y2="30"/>
+            </g>
+            <circle cx="74" cy="64" r="28" fill="#f6c945" stroke="#e09f1f" stroke-width="1.5"/>
+            <circle class="pin" cx="106" cy="34" r="12"/>
+            <text class="pin-num" x="106" y="34">1</text>
+          </g>
+
+          <!-- 2. Awan dan hujan -->
+          <g class="hs" tabindex="0" role="button" aria-label="Awan dan hujan" data-t="Awan dan hujan" data-k="Abiotik" data-r="" data-i="Sumber air bagi lereng. Hujan yang deras dan lama menjadi tenaga utama penyebab erosi dan longsor, sementara hujan yang cukup menjaga tanah tetap lembap.">
+            <rect class="hit" x="272" y="18" width="146" height="102" rx="10"/>
+            <circle cx="308" cy="58" r="20" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="340" cy="46" r="26" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="374" cy="58" r="20" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <rect x="306" y="50" width="70" height="26" fill="#fff"/>
+            <g stroke="#0284c7" stroke-width="2.8" stroke-linecap="round">
+              <path d="M298,86 l-5,20"/>
+              <path d="M320,86 l-5,20"/>
+              <path d="M342,86 l-5,20"/>
+              <path d="M364,86 l-5,20"/>
+              <path d="M386,86 l-5,20"/>
+            </g>
+            <circle class="pin" cx="398" cy="34" r="12"/>
+            <text class="pin-num" x="398" y="34">2</text>
+          </g>
+
+          <!-- 3. Angin -->
+          <g class="hs" tabindex="0" role="button" aria-label="Angin" data-t="Angin" data-k="Abiotik" data-r="udara" data-i="Udara yang bergerak karena perbedaan pemanasan. Angin mempercepat penguapan air dan membantu menyebarkan biji serta serbuk sari.">
+            <rect class="hit" x="500" y="34" width="192" height="80" rx="10"/>
+            <path d="M516,58 q28,-13 56,0 t56,0" stroke="#3b6982" stroke-width="2.8" fill="none" marker-end="url(#arw)"/>
+            <path d="M530,78 q28,-13 56,0 t56,0" stroke="#3b6982" stroke-width="2.8" fill="none" marker-end="url(#arw)"/>
+            <path d="M516,98 q28,-13 56,0 t56,0" stroke="#3b6982" stroke-width="2.8" fill="none" marker-end="url(#arw)"/>
+            <circle class="pin" cx="672" cy="48" r="12"/>
+            <text class="pin-num" x="672" y="48">3</text>
+          </g>
+
+          <!-- 4. Pohon -->
+          <g class="hs" tabindex="0" role="button" aria-label="Pohon" data-t="Pohon" data-k="Biotik" data-r="produsen" data-i="Produsen: membuat makanan lewat fotosintesis. Tajuknya meredam hantaman hujan, akarnya mengikat tanah, dan daun yang gugur menjadi serasah penyubur tanah.">
+            <rect class="hit" x="50" y="112" width="180" height="122" rx="10"/>
+            <rect x="85" y="166" width="11" height="44" fill="#6b4423"/>
+            <circle cx="90" cy="144" r="31" fill="#2f8f4e" stroke="#14532d" stroke-width="1.4"/>
+            <circle cx="80" cy="137" r="17" fill="#3aa35d"/>
+            <rect x="184" y="182" width="11" height="44" fill="#6b4423"/>
+            <circle cx="190" cy="160" r="29" fill="#2f8f4e" stroke="#14532d" stroke-width="1.4"/>
+            <circle cx="180" cy="153" r="16" fill="#3aa35d"/>
+            <circle class="pin" cx="140" cy="128" r="12"/>
+            <text class="pin-num" x="140" y="128">4</text>
+          </g>
+
+          <!-- 5. Burung -->
+          <g class="hs" tabindex="0" role="button" aria-label="Burung" data-t="Burung" data-k="Biotik" data-r="konsumen tingkat II" data-i="Konsumen tingkat II: burung pemakan serangga memakan herbivora seperti belalang. Ia dapat menjadi mangsa pemangsa yang lebih besar.">
+            <circle class="hit" cx="468" cy="134" r="34"/>
+            <path d="M442,140 q13,-16 26,-2 q13,-14 26,2" stroke="#1e293b" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+            <circle cx="468" cy="138" r="3" fill="#1e293b"/>
+            <circle class="pin" cx="494" cy="114" r="12"/>
+            <text class="pin-num" x="494" y="114">5</text>
+          </g>
+
+          <!-- 6. Jamur -->
+          <g class="hs" tabindex="0" role="button" aria-label="Jamur" data-t="Jamur" data-k="Biotik" data-r="pengurai" data-i="Pengurai: mencerna bahan organik mati (serasah, kayu lapuk) di luar tubuhnya dengan enzim, lalu menyerap hasilnya. Hasil penguraian mengembalikan zat hara ke tanah.">
+            <rect class="hit" x="228" y="196" width="50" height="44" rx="8"/>
+            <rect x="248" y="219" width="10" height="15" rx="2" fill="#f1e6cf" stroke="#a89472" stroke-width="1.2"/>
+            <path d="M235,220 a18,14 0 0 1 36,0 z" fill="#d9534f" stroke="#991b1b" stroke-width="1.2"/>
+            <circle cx="247" cy="213" r="2.5" fill="#fff"/>
+            <circle cx="258" cy="215" r="2" fill="#fff"/>
+            <circle class="pin" cx="253" cy="194" r="12"/>
+            <text class="pin-num" x="253" y="194">6</text>
+          </g>
+
+          <!-- 7. Rumput -->
+          <g class="hs" tabindex="0" role="button" aria-label="Rumput" data-t="Rumput" data-k="Biotik" data-r="produsen" data-i="Produsen: menutup permukaan tanah. Akar serabutnya yang halus dan rapat mengikat tanah lapisan atas, daunnya meredam hujan, dan ia menjadi makanan herbivora seperti belalang.">
+            <polygon class="hit" points="282,208 616,268 616,308 282,248"/>
+            <g stroke="#1b7a4a" stroke-width="2.8" fill="none" stroke-linecap="round">
+              <path d="M298,243 Q294,230 287,222 M298,243 Q296,228 298,218 M298,243 Q303,230 309,222"/>
+              <path d="M342,251 Q338,238 331,230 M342,251 Q340,236 342,226 M342,251 Q347,238 353,230"/>
+              <path d="M448,269 Q444,256 437,248 M448,269 Q446,254 448,244 M448,269 Q453,256 459,248"/>
+              <path d="M495,277 Q491,264 484,256 M495,277 Q493,262 495,252 M495,277 Q500,264 506,256"/>
+              <path d="M542,286 Q538,273 531,265 M542,286 Q540,271 542,261 M542,286 Q547,273 553,265"/>
+              <path d="M590,294 Q586,281 579,273 M590,294 Q588,279 590,269 M590,294 Q595,281 601,273"/>
+            </g>
+            <circle class="pin" cx="520" cy="245" r="12"/>
+            <text class="pin-num" x="520" y="245">7</text>
+          </g>
+
+          <!-- 8. Belalang -->
+          <g class="hs" tabindex="0" role="button" aria-label="Belalang" data-t="Belalang" data-k="Biotik" data-r="konsumen tingkat I (herbivora)" data-i="Konsumen tingkat I: memakan rumput. Belalang sendiri menjadi makanan katak, burung, dan hewan lain pada jaring-jaring makanan.">
+            <circle class="hit" cx="400" cy="246" r="28"/>
+            <ellipse cx="398" cy="249" rx="14" ry="6" fill="#65a30d" stroke="#365314" stroke-width="1.2"/>
+            <circle cx="412" cy="246" r="5" fill="#65a30d" stroke="#365314" stroke-width="1.2"/>
+            <path d="M389,250 l-10,-11 l-5,13 M396,254 l4,9 M403,254 l4,9 M415,243 l10,-10" stroke="#365314" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle class="pin" cx="400" cy="218" r="12"/>
+            <text class="pin-num" x="400" y="218">8</text>
+          </g>
+
+          <!-- 9. Tanah lapisan atas (humus) -->
+          <g class="hs" tabindex="0" role="button" aria-label="Tanah lapisan atas (humus)" data-t="Tanah lapisan atas (humus)" data-k="Abiotik" data-r="tanah" data-i="Lapisan tanah yang kaya humus dan unsur hara. Paling subur untuk tumbuhan, tetapi juga paling mudah terbawa erosi bila tidak tertutup vegetasi.">
+            <polygon class="hit" points="0,192 720,318 720,348 0,222"/>
+            <g fill="#9c7a54">
+              <circle cx="40" cy="212" r="2"/><circle cx="85" cy="220" r="2"/><circle cx="135" cy="229" r="2"/>
+              <circle cx="185" cy="238" r="2"/><circle cx="235" cy="246" r="2"/><circle cx="285" cy="255" r="2"/>
+              <circle cx="435" cy="281" r="2"/><circle cx="490" cy="291" r="2"/><circle cx="545" cy="300" r="2"/>
+              <circle cx="600" cy="310" r="2"/><circle cx="655" cy="319" r="2"/>
+            </g>
+            <circle class="pin" cx="165" cy="236" r="12"/>
+            <text class="pin-num" x="165" y="236">9</text>
+          </g>
+
+          <!-- 10. Cacing tanah -->
+          <g class="hs" tabindex="0" role="button" aria-label="Cacing tanah" data-t="Cacing tanah" data-k="Biotik" data-r="detritivor" data-i="Detritivor: memakan serasah dan sisa organisme, lalu menggemburkan tanah dengan terowongannya. Ia butuh tanah yang lembap karena bernapas lewat kulit.">
+            <rect class="hit" x="315" y="254" width="82" height="34" rx="9"/>
+            <path d="M324,271 q7,-10 14,0 t14,0 t14,0 t14,0" stroke="#fda4af" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+            <path d="M324,271 q7,-10 14,0 t14,0 t14,0 t14,0" stroke="#be123c" stroke-width="1.1" fill="none" stroke-linecap="round" stroke-dasharray="3 4"/>
+            <circle class="pin" cx="356" cy="292" r="12"/>
+            <text class="pin-num" x="356" y="292">10</text>
+          </g>
+
+          <!-- 11. Kemiringan lereng -->
+          <g class="hs" tabindex="0" role="button" aria-label="Kemiringan lereng" data-t="Kemiringan lereng" data-k="Abiotik" data-r="topografi" data-i="Topografi: semakin curam lereng, semakin cepat air mengalir dan semakin mudah tanah terbawa. Kemiringan juga memengaruhi ketebalan tanah dan penyinaran matahari.">
+            <rect class="hit" x="622" y="280" width="94" height="54" rx="6"/>
+            <path d="M632,312 H712" stroke="#fff" stroke-width="2.6" stroke-dasharray="5 4"/>
+            <path d="M684,312 A50,50 0 0 1 682,321" stroke="#fde047" stroke-width="2.6" fill="none"/>
+            <text x="695" y="326" font-size="19" fill="#fde047" font-weight="700" font-family="'Noto Serif',Georgia,serif">&#945;</text>
+            <circle class="pin" cx="652" cy="294" r="12"/>
+            <text class="pin-num" x="652" y="294">11</text>
+          </g>
+
+          <!-- 12. Batuan dasar -->
+          <g class="hs" tabindex="0" role="button" aria-label="Batuan dasar" data-t="Batuan dasar" data-k="Abiotik" data-r="" data-i="Lapisan batuan di bawah tanah. Pelapukan batuan oleh air, suhu, dan organisme menghasilkan bahan pembentuk tanah.">
+            <polygon class="hit" points="0,275 720,400 720,430 0,430"/>
+            <circle class="pin" cx="255" cy="382" r="12"/>
+            <text class="pin-num" x="255" y="382">12</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="side-panel">
+        <p class="count-pill" id="hscount">Dijelajahi: 0 dari 12 objek</p>
+        <div class="cm-info" id="hsinfo" aria-live="polite">
+          <div><b>Petunjuk:</b> ketuk salah satu objek bernomor (<b>1&ndash;12</b>) pada gambar di samping untuk melihat penjelasannya di sini.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  const svg = document.getElementById('hsvg');
+  const info = document.getElementById('hsinfo');
+  const cnt = document.getElementById('hscount');
+  const btnReset = document.getElementById('btnReset');
+  const nodes = Array.from(svg.querySelectorAll('.hs'));
+  const total = nodes.length;
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+    });
+  }
+
+  function updateCount(){
+    let bi = 0, ab = 0;
+    svg.querySelectorAll('.hs.seen').forEach(function(x){
+      if (x.dataset.k === 'Biotik') bi++; else ab++;
+    });
+    const seen = bi + ab;
+    cnt.textContent = seen === 0
+      ? 'Dijelajahi: 0 dari ' + total + ' objek'
+      : 'Dijelajahi: ' + seen + ' dari ' + total + ' objek (biotik: ' + bi + ', abiotik: ' + ab + ')' + (seen === total ? ' \u2713' : '');
+  }
+
+  function pick(g){
+    nodes.forEach(function(n){ n.classList.remove('active'); });
+    g.classList.add('seen', 'active');
+    const bio = g.dataset.k === 'Biotik';
+    info.innerHTML =
+      '<div style="margin-bottom:6px"><b>' + esc(g.dataset.t) + '</b> ' +
+      '<span class="bdg ' + (bio ? 'bio' : 'abi') + '">' +
+      esc(g.dataset.k) + (g.dataset.r ? ': ' + esc(g.dataset.r) : '') +
+      '</span></div>' +
+      '<div>' + esc(g.dataset.i) + '</div>';
+    updateCount();
+  }
+
+  svg.addEventListener('click', function(e){
+    const g = e.target.closest('.hs');
+    if (g) pick(g);
+  });
+
+  svg.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' '){
+      const g = e.target.closest('.hs');
+      if (g){
+        e.preventDefault();
+        pick(g);
+      }
+    }
+  });
+
+  btnReset.addEventListener('click', function(){
+    nodes.forEach(function(n){ n.classList.remove('seen', 'active'); });
+    info.innerHTML = '<div><b>Petunjuk:</b> ketuk salah satu objek bernomor (<b>1&ndash;12</b>) pada gambar di samping untuk melihat penjelasannya di sini.</div>';
+    updateCount();
+  });
+
+  updateCount();
+})();
+</script>
+</body>
+</html>

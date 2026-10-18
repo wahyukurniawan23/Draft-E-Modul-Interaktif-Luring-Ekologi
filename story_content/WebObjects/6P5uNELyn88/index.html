@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penilaian Diri KB 6 - EMILIE | IPA Kelas VII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fs:16pt;
+  --g900:#103d2a;
+  --g800:#14532d;
+  --g700:#1b7a4a;
+  --g500:#2f9e63;
+  --g200:#bfe3cf;
+  --g100:#e7f5ed;
+  --teal:#0f766e;
+  --bg:#f4f9f6;
+  --card:#ffffff;
+  --ink:#17261e;
+  --mut:#4a5d52;
+  --line:#d3e3d9;
+  --sky:#0369a1;
+  --skybg:#e6f3fb;
+  --amb:#b45309;
+  --ambbg:#fff3dc;
+  --red:#b42318;
+  --redbg:#fdecea;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:#dfece4;
+  color:var(--ink);
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:10px;
+}
+/* Bingkai aplikasi ukuran 800 x 600 piksel */
+.app-frame{
+  width:800px;
+  max-width:100%;
+  height:600px;
+  background:var(--bg);
+  border:2px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 10px 32px rgba(16,61,42,.14);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+.stage-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px 12px;
+  padding:12px 18px;
+  background:var(--teal);
+  color:#fff;
+  font-weight:700;
+  letter-spacing:.02em;
+  flex-shrink:0;
+}
+.stage-head h1{
+  margin:0;
+  font-size:1.1em;
+  color:#fff;
+  line-height:1.25;
+}
+.stage-head .prog-pill{
+  font-weight:600;
+  font-size:var(--fs);
+  background:rgba(255,255,255,.22);
+  border-radius:999px;
+  padding:2px 14px;
+  white-space:nowrap;
+}
+/* Kotak identitas hasil cetak (tampil saat nama diisi atau saat cetak) */
+.student-banner{
+  background:var(--g100);
+  border-bottom:2px solid var(--g200);
+  padding:8px 18px;
+  display:none;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:6px 14px;
+  font-size:var(--fs);
+  color:var(--g900);
+  flex-shrink:0;
+}
+.student-banner.show{
+  display:flex;
+}
+.scroll-area{
+  flex:1;
+  overflow-y:auto;
+  padding:12px 16px 18px;
+}
+.self-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 16px 16px;
+  margin:0;
+  box-shadow:0 1px 3px rgba(16,61,42,.05);
+}
+.lead{
+  margin:0 0 10px;
+  color:var(--mut);
+  font-size:var(--fs);
+}
+.mrow{
+  display:grid;
+  grid-template-columns:1.55fr 1fr;
+  gap:12px;
+  align-items:center;
+  margin:8px 0;
+  padding:10px 12px;
+  background:#f9fcfa;
+  border-radius:10px;
+  border:1.5px solid #e3efe7;
+  transition:background .2s,border-color .2s;
+}
+.mrow:hover{
+  border-color:var(--g500);
+}
+.mrow.unanswered-hl{
+  background:var(--ambbg);
+  border-left:5px solid var(--amb);
+}
+.mrow.val-2{
+  background:#e9f7ef;
+  border-color:#8fd4ae;
+}
+.mrow.val-1{
+  background:#fff9eb;
+  border-color:#f3d59a;
+}
+.mrow.val-0{
+  background:#fef2f2;
+  border-color:#f3b8b2;
+}
+@media(max-width:620px){
+  .mrow{grid-template-columns:1fr}
+}
+.stmt{
+  font-size:var(--fs);
+  color:var(--ink);
+}
+.stmt b{
+  color:var(--g900);
+}
+select,input[type=text]{
+  width:100%;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  padding:8px 10px;
+  border:1.5px solid #b9d0c3;
+  border-radius:9px;
+  background:#fff;
+  color:var(--ink);
+  cursor:pointer;
+}
+select:focus,input[type=text]:focus,button:focus-visible{
+  outline:3px solid #8fd4ae;
+  outline-offset:1px;
+}
+.warn-box{
+  display:none;
+  margin:12px 0;
+  padding:10px 14px;
+  border-radius:10px;
+  background:var(--ambbg);
+  border-left:6px solid var(--amb);
+  color:#78350f;
+  font-weight:600;
+  font-size:var(--fs);
+}
+.warn-box.show{display:block}
+.qscore{
+  font-weight:700;
+  color:var(--g900);
+  margin:12px 0 4px;
+  padding:12px 16px;
+  background:var(--g100);
+  border-left:6px solid var(--g700);
+  border-radius:10px;
+  display:none;
+  font-size:var(--fs);
+}
+.qscore.show{display:block}
+.btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:14px 0 4px;
+  align-items:center;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--g700);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:9px 16px;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s,opacity .15s;
+}
+.btn:hover{background:var(--g800)}
+.btn.sec{
+  background:#fff;
+  color:var(--g800);
+  border:1.5px solid var(--g500);
+}
+.btn.sec:hover{background:var(--g100)}
+.btn.prt{
+  background:var(--sky);
+  color:#fff;
+}
+.btn.prt:hover{background:#075985}
+
+/* Modal Input Nama Murid Sebelum Cetak */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(16,61,42,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:100;
+}
+.modal-backdrop.open{
+  display:flex;
+}
+.modal-card{
+  background:#fff;
+  border:2px solid var(--g500);
+  border-radius:16px;
+  width:100%;
+  max-width:500px;
+  padding:18px 20px;
+  box-shadow:0 16px 40px rgba(0,0,0,.28);
+}
+.modal-card h2{
+  margin:0 0 8px;
+  font-size:1.1em;
+  color:var(--g900);
+}
+.modal-card p{
+  margin:0 0 10px;
+  font-size:var(--fs);
+}
+.modal-fld{
+  margin:8px 0;
+}
+.modal-fld label{
+  display:block;
+  font-weight:700;
+  margin-bottom:4px;
+  color:var(--g900);
+}
+.modal-err{
+  display:none;
+  color:var(--red);
+  background:var(--redbg);
+  border-left:4px solid var(--red);
+  padding:8px 12px;
+  border-radius:6px;
+  margin-top:8px;
+  font-weight:600;
+}
+.modal-err.show{display:block}
+
+@media print{
+  @page{size:A4 portrait;margin:12mm}
+  :root{
+    --fs:12pt;
+  }
+  html,body{
+    background:#fff!important;
+    padding:0!important;
+    height:auto!important;
+    overflow:visible!important;
+    font-size:12pt!important;
+    line-height:1.45!important;
+  }
+  .app-frame{
+    width:100%!important;
+    height:auto!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .stage-head{
+    padding:10px 14px!important;
+    border-radius:8px!important;
+  }
+  .stage-head h1{
+    font-size:13.5pt!important;
+  }
+  .stage-head .prog-pill,
+  .student-banner,
+  .lead,
+  .stmt,
+  select,
+  input[type=text],
+  .qscore{
+    font-size:12pt!important;
+    line-height:1.45!important;
+  }
+  .mrow{
+    padding:7px 10px!important;
+    margin:6px 0!important;
+  }
+  select{
+    padding:5px 8px!important;
+  }
+  .scroll-area{
+    overflow:visible!important;
+    padding:6px 0!important;
+  }
+  .student-banner{
+    display:flex!important;
+    border:1.5px solid var(--g700)!important;
+    border-radius:8px;
+    margin:6px 0;
+    padding:6px 12px!important;
+  }
+  .noprint,.btns,.modal-backdrop,.warn-box{
+    display:none!important;
+  }
+  .mrow,.qscore{
+    break-inside:avoid;
+  }
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app-frame" role="main">
+  <header class="stage-head">
+    <h1>PENILAIAN DIRI &mdash; KB 6</h1>
+    <span class="prog-pill" id="progText">Terisi: 0 / 5 pernyataan</span>
+  </header>
+
+  <div class="student-banner" id="studentBanner">
+    <div><b>Nama Murid:</b> <span id="outNama">-</span></div>
+    <div id="wrapKelas"><b>Kelas:</b> <span id="outKelas">-</span></div>
+    <div><b>Waktu Cetak:</b> <span id="outWaktu">-</span></div>
+  </div>
+
+  <div class="scroll-area" id="scrollArea">
+    <div class="self-card" id="selfBox"></div>
+  </div>
+</div>
+
+<!-- Modal Tulis Nama Murid sebelum Cetak ke PDF -->
+<div class="modal-backdrop" id="printModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <h2 id="modalTitle">Cetak Penilaian Diri KB 6 ke PDF</h2>
+    <p>Tuliskan nama lengkapmu terlebih dahulu agar tercetak pada lembar hasil Penilaian Diri KB 6.</p>
+    <div class="modal-fld">
+      <label for="inpNama">Nama Murid <span style="color:var(--red)">*</span></label>
+      <input type="text" id="inpNama" placeholder="Ketik nama lengkapmu..." autocomplete="name">
+    </div>
+    <div class="modal-fld">
+      <label for="inpKelas">Kelas (opsional)</label>
+      <input type="text" id="inpKelas" placeholder="Contoh: VII A">
+    </div>
+    <div class="modal-err" id="modalErr">Harap tuliskan namamu terlebih dahulu sebelum melanjutkan mencetak!</div>
+    <div class="btns" style="justify-content:flex-end;margin-top:14px">
+      <button type="button" class="btn sec" id="btnCancelPrint">Batal</button>
+      <button type="button" class="btn prt" id="btnConfirmPrint">&#128424; Lanjutkan Cetak PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const ITEMS = [
+    'Aku dapat menyusun argumen Klaim-Bukti-Alasan yang menghubungkan data Geocell dengan interaksi komponen ekosistem.',
+    'Aku dapat mengevaluasi keterbatasan Geocell plastik dan pentingnya menjaga hutan serta mengurangi sampah plastik (Reduce).',
+    'Aku dapat menjelaskan dampak erosi dan pencemaran plastik terhadap jaring-jaring makanan, pengurai, dan perubahan iklim.',
+    'Aku dapat merancang media kampanye yang memadukan pengetahuan ekologi, kepedulian, dan ajakan aksi nyata.',
+    'Aku berkomitmen melakukan aksi nyata pelestarian lingkungan di sekolah dan rumah.'
+  ];
+
+  const box = document.getElementById('selfBox');
+  const progText = document.getElementById('progText');
+  const printModal = document.getElementById('printModal');
+  const inpNama = document.getElementById('inpNama');
+  const inpKelas = document.getElementById('inpKelas');
+  const modalErr = document.getElementById('modalErr');
+  const studentBanner = document.getElementById('studentBanner');
+  const outNama = document.getElementById('outNama');
+  const outKelas = document.getElementById('outKelas');
+  const wrapKelas = document.getElementById('wrapKelas');
+  const outWaktu = document.getElementById('outWaktu');
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+    });
+  }
+
+  function renderSelf(){
+    let h = '<p class="lead">Jujurlah pada dirimu: pilih <b>Belum</b>, <b>Hampir</b>, atau <b>Sudah</b> pada setiap pernyataan di bawah ini.</p>';
+    ITEMS.forEach(function(t, i){
+      h += '<div class="mrow" id="mrow-' + i + '">' +
+           '<span class="stmt"><b>' + (i + 1) + '.</b> ' + esc(t) + '</span>' +
+           '<select data-i="' + i + '" aria-label="' + esc(t) + '">' +
+           '<option value="">Pilih...</option>' +
+           '<option value="0">Belum</option>' +
+           '<option value="1">Hampir</option>' +
+           '<option value="2">Sudah</option>' +
+           '</select></div>';
+    });
+    h += '<div class="warn-box" id="warnBox" role="alert"></div>';
+    h += '<div class="qscore" id="selfSum" aria-live="polite"></div>';
+    h += '<div class="btns noprint">' +
+         '<button type="button" class="btn sec" data-act="reset">Ulangi</button>' +
+         '<button type="button" class="btn prt" data-act="print">&#128424; Cetak ke PDF</button>' +
+         '</div>';
+    box.innerHTML = h;
+  }
+
+  function getMissing(){
+    const missing = [];
+    Array.from(box.querySelectorAll('select')).forEach(function(s, i){
+      if (s.value === '') missing.push(i + 1);
+    });
+    return missing;
+  }
+
+  function updateSelf(){
+    const sels = Array.from(box.querySelectorAll('select'));
+    const vals = sels.map(function(x){ return x.value; });
+    const n = vals.length;
+    const done = vals.filter(function(v){ return v === '2'; }).length;
+    const part = vals.filter(function(v){ return v === '1'; }).length;
+    const notYet = vals.filter(function(v){ return v === '0'; }).length;
+    const filled = vals.filter(function(v){ return v !== ''; }).length;
+
+    progText.textContent = 'Terisi: ' + filled + ' / ' + n + ' pernyataan';
+
+    sels.forEach(function(s, i){
+      const row = document.getElementById('mrow-' + i);
+      row.classList.remove('val-0', 'val-1', 'val-2');
+      if (s.value !== ''){
+        row.classList.remove('unanswered-hl');
+        row.classList.add('val-' + s.value);
+      }
+    });
+
+    const warnBox = document.getElementById('warnBox');
+    if (filled === n){
+      warnBox.classList.remove('show');
+      warnBox.textContent = '';
+    }
+
+    const sumEl = document.getElementById('selfSum');
+    if (filled === 0){
+      sumEl.classList.remove('show');
+      sumEl.textContent = '';
+    } else {
+      let msg = 'Sudah: ' + done + ' dari ' + n + '. Hampir: ' + part + '. Belum: ' + notYet + '. ';
+      if (done === n){
+        msg += 'Hebat! Kamu telah menuntaskan seluruh Kegiatan Belajar dengan baik.';
+      } else if (filled === n){
+        msg += 'Ulangi bagian yang masih "Belum" atau "Hampir" agar pemahamanmu makin mantap.';
+      }
+      sumEl.textContent = msg;
+      sumEl.classList.add('show');
+    }
+  }
+
+  function resetSelf(){
+    Array.from(box.querySelectorAll('select')).forEach(function(s, i){
+      s.value = '';
+      const row = document.getElementById('mrow-' + i);
+      row.classList.remove('unanswered-hl', 'val-0', 'val-1', 'val-2');
+    });
+    const warnBox = document.getElementById('warnBox');
+    warnBox.classList.remove('show');
+    warnBox.textContent = '';
+    updateSelf();
+    document.getElementById('scrollArea').scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function openPrintModal(){
+    const missing = getMissing();
+    const warnBox = document.getElementById('warnBox');
+    if (missing.length > 0){
+      Array.from(box.querySelectorAll('.mrow')).forEach(function(r, idx){
+        r.classList.toggle('unanswered-hl', missing.indexOf(idx + 1) !== -1);
+      });
+      warnBox.innerHTML = '&#9888;&#65039; <b>Peringatan:</b> Silakan pilih dulu status pada <b>Pernyataan nomor ' + missing.join(', ') + '</b> sebelum mencetak ke PDF.';
+      warnBox.classList.add('show');
+      const firstRow = document.getElementById('mrow-' + (missing[0] - 1));
+      if (firstRow) firstRow.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    modalErr.classList.remove('show');
+    printModal.classList.add('open');
+    setTimeout(function(){ inpNama.focus(); }, 50);
+  }
+
+  function closePrintModal(){
+    printModal.classList.remove('open');
+  }
+
+  function confirmPrint(){
+    const nama = inpNama.value.trim();
+    const kelas = inpKelas.value.trim();
+    if (!nama){
+      modalErr.classList.add('show');
+      inpNama.focus();
+      return;
+    }
+    outNama.textContent = nama;
+    if (kelas){
+      outKelas.textContent = kelas;
+      wrapKelas.style.display = '';
+    } else {
+      wrapKelas.style.display = 'none';
+    }
+    outWaktu.textContent = new Date().toLocaleString('id-ID', {
+      day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+    });
+    studentBanner.classList.add('show');
+    closePrintModal();
+    setTimeout(function(){ window.print(); }, 150);
+  }
+
+  renderSelf();
+  updateSelf();
+
+  box.addEventListener('change', updateSelf);
+  box.addEventListener('click', function(e){
+    const b = e.target.closest('button[data-act]');
+    if (!b) return;
+    const act = b.dataset.act;
+    if (act === 'reset') resetSelf();
+    else if (act === 'print') openPrintModal();
+  });
+
+  document.getElementById('btnCancelPrint').addEventListener('click', closePrintModal);
+  document.getElementById('btnConfirmPrint').addEventListener('click', confirmPrint);
+  inpNama.addEventListener('input', function(){
+    if (inpNama.value.trim()) modalErr.classList.remove('show');
+  });
+  printModal.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closePrintModal();
+    else if (e.key === 'Enter'){
+      e.preventDefault();
+      confirmPrint();
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asesmen Sumatif - EMILIE | IPA Kelas VII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fs:16pt;
+  --g900:#103d2a;
+  --g800:#14532d;
+  --g700:#1b7a4a;
+  --g500:#2f9e63;
+  --g200:#bfe3cf;
+  --g100:#e7f5ed;
+  --teal:#0f766e;
+  --bg:#f4f9f6;
+  --card:#ffffff;
+  --ink:#17261e;
+  --mut:#4a5d52;
+  --line:#d3e3d9;
+  --sky:#0369a1;
+  --skybg:#e6f3fb;
+  --amb:#b45309;
+  --ambbg:#fff3dc;
+  --red:#b42318;
+  --redbg:#fdecea;
+  --pur:#6d28d9;
+  --purbg:#f1ebfd;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:#dfece4;
+  color:var(--ink);
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:12px;
+}
+/* Bingkai aplikasi ukuran 860 x 1240 piksel */
+.app-frame{
+  width:860px;
+  max-width:100%;
+  height:1240px;
+  background:var(--bg);
+  border:2px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 10px 32px rgba(16,61,42,.14);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+/* Kotak identitas hasil cetak (tampil saat nama diisi atau saat cetak) */
+.student-banner{
+  background:var(--g100);
+  border-bottom:2px solid var(--g200);
+  padding:10px 20px;
+  display:none;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:6px 16px;
+  font-size:var(--fs);
+  color:var(--g900);
+  flex-shrink:0;
+}
+.student-banner.show{
+  display:flex;
+}
+.scroll-area{
+  flex:1;
+  overflow-y:auto;
+  padding:16px 18px 24px;
+}
+h2.sec-head{
+  font-size:1.15em;
+  line-height:1.3;
+  color:var(--g900);
+  border-bottom:2px solid var(--g200);
+  padding-bottom:6px;
+  margin:18px 0 12px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+h2.sec-head:first-of-type{
+  margin-top:0;
+}
+.prog-pill{
+  font-weight:600;
+  font-size:var(--fs);
+  background:var(--purbg);
+  color:var(--pur);
+  border:1.5px solid #d8b4fe;
+  border-radius:999px;
+  padding:2px 14px;
+  white-space:nowrap;
+}
+.quiz,.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 18px 18px;
+  margin:0 0 14px;
+  box-shadow:0 1px 3px rgba(16,61,42,.05);
+}
+.qc{
+  border-bottom:1.5px dashed var(--line);
+  padding:14px 0;
+  transition:background .2s,border-color .2s;
+}
+.qc:last-of-type{border-bottom:0}
+.qc.unanswered-hl{
+  background:var(--ambbg);
+  border-left:5px solid var(--amb);
+  padding-left:12px;
+  padding-right:8px;
+  border-radius:8px;
+}
+.qs{
+  font-weight:700;
+  margin:.2em 0 .55em;
+  color:var(--g900);
+  font-size:var(--fs);
+}
+.opt{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:9px 12px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  margin:8px 0;
+  cursor:pointer;
+  background:#fff;
+  font-size:var(--fs);
+}
+.opt:hover{border-color:var(--g500)}
+.opt.ok{background:#e1f5e8;border-color:#2f9e63}
+.opt.bad{background:var(--redbg);border-color:#e07a70}
+input[type=radio],input[type=checkbox]{
+  width:22px;
+  height:22px;
+  margin-top:4px;
+  accent-color:var(--g700);
+  flex:none;
+  cursor:pointer;
+}
+textarea,input[type=text]{
+  width:100%;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  line-height:1.5;
+  padding:10px 12px;
+  border:1.5px solid #b9d0c3;
+  border-radius:10px;
+  background:#fff;
+  color:var(--ink);
+  resize:vertical;
+}
+textarea{
+  min-height:120px;
+}
+textarea:focus,input[type=text]:focus,button:focus-visible{
+  outline:3px solid #8fd4ae;
+  outline-offset:1px;
+}
+.fb{
+  margin:10px 0 0;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:var(--fs);
+  display:none;
+}
+.fb.ok{display:block;background:#e1f5e8;color:#14532d;border-left:5px solid #2f9e63}
+.fb.bad{display:block;background:var(--redbg);color:#7a1d14;border-left:5px solid #e07a70}
+.warn-box{
+  display:none;
+  margin:12px 0;
+  padding:12px 16px;
+  border-radius:10px;
+  background:var(--ambbg);
+  border-left:6px solid var(--amb);
+  color:#78350f;
+  font-weight:600;
+  font-size:var(--fs);
+}
+.warn-box.show{display:block}
+.qscore{
+  font-weight:700;
+  color:var(--g900);
+  margin:12px 0 4px;
+  padding:10px 14px;
+  background:var(--g100);
+  border-left:6px solid var(--g700);
+  border-radius:10px;
+  font-size:var(--fs);
+}
+.qscore:empty{
+  display:none;
+}
+.box{
+  border-left:6px solid var(--g500);
+  background:var(--g100);
+  border-radius:0 12px 12px 0;
+  padding:12px 16px;
+  margin:12px 0;
+  font-size:var(--fs);
+}
+.box > b:first-child{
+  display:block;
+  margin-bottom:4px;
+  color:var(--g900);
+}
+.box.tip{border-color:var(--amb);background:var(--ambbg)}
+.box.fakta{border-color:var(--teal);background:#e3f6f3}
+.small{
+  font-size:var(--fs);
+  color:var(--mut);
+  margin:8px 0;
+}
+.key.hide{
+  display:none;
+}
+.res{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px;
+  margin:10px 0 14px;
+}
+.res div{
+  background:var(--g100);
+  border:1.5px solid var(--g200);
+  border-radius:10px;
+  padding:10px 14px;
+}
+.res b{
+  display:block;
+  font-size:1.15em;
+  color:var(--g900);
+}
+.res span{
+  display:block;
+  font-size:var(--fs);
+  color:var(--mut);
+}
+.btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:14px 0 6px;
+  align-items:center;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--g700);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:10px 18px;
+  font-family:'Noto Serif',Georgia,'Times New Roman',serif;
+  font-size:var(--fs);
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s,opacity .15s;
+}
+.btn:hover{background:var(--g800)}
+.btn.unready{
+  background:#7c9a89;
+  opacity:.78;
+}
+.btn.unready:hover{
+  background:#698776;
+}
+.btn.sec{
+  background:#fff;
+  color:var(--g800);
+  border:1.5px solid var(--g500);
+}
+.btn.sec:hover{background:var(--g100)}
+.btn.prt{
+  background:var(--sky);
+  color:#fff;
+}
+.btn.prt:hover{background:#075985}
+.footer-print{
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  padding:14px 18px;
+  margin-top:16px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+/* Modal Input Nama Murid Sebelum Cetak */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(16,61,42,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:100;
+}
+.modal-backdrop.open{
+  display:flex;
+}
+.modal-card{
+  background:#fff;
+  border:2px solid var(--g500);
+  border-radius:16px;
+  width:100%;
+  max-width:520px;
+  padding:20px 22px;
+  box-shadow:0 16px 40px rgba(0,0,0,.28);
+}
+.modal-card h2{
+  margin:0 0 8px;
+  font-size:1.15em;
+  color:var(--g900);
+}
+.modal-card p{
+  margin:0 0 12px;
+  font-size:var(--fs);
+}
+.modal-fld{
+  margin:10px 0;
+}
+.modal-fld label{
+  display:block;
+  font-weight:700;
+  margin-bottom:4px;
+  color:var(--g900);
+}
+.modal-err{
+  display:none;
+  color:var(--red);
+  background:var(--redbg);
+  border-left:4px solid var(--red);
+  padding:8px 12px;
+  border-radius:6px;
+  margin-top:8px;
+  font-weight:600;
+}
+.modal-err.show{display:block}
+
+/* Kotak cetak jawaban uraian agar tidak terpotong saat dicetak ke PDF */
+.print-ans{
+  display:none;
+  border:1px solid #888;
+  border-radius:8px;
+  padding:8px 12px;
+  margin-top:6px;
+  white-space:pre-wrap;
+  word-break:break-word;
+  background:#fff;
+}
+
+@media print{
+  @page{size:A4 portrait;margin:12mm}
+  :root{
+    --fs:12pt;
+  }
+  html,body{
+    background:#fff!important;
+    padding:0!important;
+    height:auto!important;
+    overflow:visible!important;
+    font-size:12pt!important;
+    line-height:1.45!important;
+  }
+  .app-frame{
+    width:100%!important;
+    height:auto!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .scroll-area{
+    overflow:visible!important;
+    padding:6px 0!important;
+  }
+  .student-banner{
+    display:flex!important;
+    border:1.5px solid var(--g700)!important;
+    border-radius:10px;
+    margin:0 0 12px 0;
+    padding:8px 14px!important;
+    font-size:12pt!important;
+  }
+  h2.sec-head{
+    font-size:13.5pt!important;
+    margin:14px 0 8px!important;
+  }
+  .prog-pill,.qs,.opt,.fb,.qscore,.box,.small,.res span,input[type=text],textarea,.print-ans{
+    font-size:12pt!important;
+    line-height:1.45!important;
+  }
+  .res b{
+    font-size:13pt!important;
+  }
+  textarea{
+    display:none!important;
+  }
+  .print-ans{
+    display:block!important;
+    min-height:48px;
+  }
+  .noprint,.btns,.modal-backdrop,.warn-box,.footer-print{
+    display:none!important;
+  }
+  .qc,.opt,.fb,.card,.box,.res div{
+    break-inside:avoid;
+  }
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app-frame" role="main">
+  <div class="student-banner" id="studentBanner">
+    <div><b>Nama Murid:</b> <span id="outNama">-</span></div>
+    <div id="wrapKelas"><b>Kelas:</b> <span id="outKelas">-</span></div>
+    <div><b>Waktu Cetak:</b> <span id="outWaktu">-</span></div>
+  </div>
+
+  <div class="scroll-area" id="scrollArea">
+    <h2 class="sec-head" id="sum-a">
+      <span>Bagian A &mdash; Pilihan Ganda</span>
+      <span class="prog-pill" id="progTextA">Terjawab: 0 / 10 soal</span>
+    </h2>
+    <div class="quiz" id="quizBoxA"></div>
+
+    <h2 class="sec-head" id="sum-b">
+      <span>Bagian B &mdash; Uraian</span>
+      <span class="prog-pill" id="progTextB">Terisi: 0 / 6 uraian</span>
+    </h2>
+    <div id="uraianBox"></div>
+
+    <h2 class="sec-head" id="sum-hasil">
+      <span>Hasil dan Tindak Lanjut</span>
+    </h2>
+    <div class="card" id="sumres" aria-live="polite">
+      <p class="small">Selesaikan Bagian A (tekan "Periksa Jawaban") dan Bagian B (centang poin kunci) untuk melihat nilai usulanmu.</p>
+    </div>
+
+    <div class="footer-print noprint">
+      <span class="small" style="margin:0;font-weight:600;color:var(--g900)">Sudah selesai mengerjakan Bagian A dan Bagian B?</span>
+      <div class="btns" style="margin:0">
+        <button type="button" class="btn sec" id="btnResetAll">Ulangi Semua</button>
+        <button type="button" class="btn prt" id="btnPrintAll">&#128424; Cetak ke PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tulis Nama Murid sebelum Cetak ke PDF -->
+<div class="modal-backdrop" id="printModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <h2 id="modalTitle">Cetak Hasil Asesmen Sumatif ke PDF</h2>
+    <p>Tuliskan nama lengkapmu terlebih dahulu agar tercetak pada lembar hasil Asesmen Sumatif.</p>
+    <div class="modal-fld">
+      <label for="inpNama">Nama Murid <span style="color:var(--red)">*</span></label>
+      <input type="text" id="inpNama" placeholder="Ketik nama lengkapmu..." autocomplete="name">
+    </div>
+    <div class="modal-fld">
+      <label for="inpKelas">Kelas (opsional)</label>
+      <input type="text" id="inpKelas" placeholder="Contoh: VII A">
+    </div>
+    <div class="modal-err" id="modalErr">Harap tuliskan namamu terlebih dahulu sebelum melanjutkan mencetak!</div>
+    <div class="btns" style="justify-content:flex-end;margin-top:16px">
+      <button type="button" class="btn sec" id="btnCancelPrint">Batal</button>
+      <button type="button" class="btn prt" id="btnConfirmPrint">&#128424; Lanjutkan Cetak PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const Q_A = [
+    {t:'mcq', q:'Di lereng perbukitan Semende Darat Tengah, petani mengamati bahwa pada kebun yang masih dinaungi pepohonan dan rumput penutup tanah, tanahnya gembur, lembap, serta banyak dihuni cacing tanah. Sebaliknya, pada lereng gundul yang baru dibuka, tanah menjadi keras saat panas dan mudah tergerus saat hujan. Perbedaan kondisi ini menunjukkan bahwa ...',
+     o:[
+       'kondisi fisik tanah (abiotik) hanya ditentukan oleh curah hujan dan jenis batuan dasar tanpa dipengaruhi oleh vegetasi',
+       'komponen biotik dan abiotik berinteraksi secara timbal balik dalam menjaga kelembapan, kesuburan, dan kestabilan tanah lereng',
+       'keberadaan cacing tanah hanya dipengaruhi oleh kemiringan lereng dan tidak berkaitan dengan ketersediaan serasah tumbuhan',
+       'pepohonan dan rumput hanya berperan mengambil unsur hara dari dalam tanah tanpa memengaruhi tata air permukaan'
+     ], a:1, e:'Vegetasi (biotik) menaungi tanah, meredam pukulan hujan, menjaga kelembapan dan suhu tanah (abiotik), serta menyumbang serasah bagi cacing tanah (detritivor) yang menggemburkan pori tanah sehingga air hujan mudah meresap.'},
+    {t:'mcq', q:'Ketika sebuah kelompok merancang Geocell dengan ukuran lubang sel terlalu sempit (a = 2 cm) untuk bibit rumput berdiameter rumpun d = 3,5 cm, serta meletakkan bak lereng di sudut gelap yang tidak terkena sinar matahari, rumput mengalami klorosis (menguning) dan kerdil. Dalam konsep ekologi, hal yang menghambat kelangsungan hidup produsen tersebut adalah ...',
+     o:[
+       'kelebihan ketersediaan gas karbon dioksida dan uap air di udara sekitar sudut ruangan yang teduh',
+       'terjadinya kompetisi perebutan mineral antara akar rumput dengan pita plastik kemasan yang menjepitnya',
+       'ruang tumbuh yang sempit dan minimnya intensitas cahaya matahari yang menjadi faktor pembatas bagi rumput',
+       'meningkatnya laju fotosintesis secara berlebihan ketika tumbuhan diletakkan pada suhu ruangan yang sejuk'
+     ], a:2, e:'Ukuran lubang yang lebih kecil dari diameter rumpun (a < d) membatasi ruang tumbuh akar dan anakan, sedangkan kurangnya cahaya matahari menghambat pembentukan klorofil dan fotosintesis; keduanya menjadi faktor pembatas bagi rumput.'},
+    {t:'mcq', q:'Perhatikan rangkaian peristiwa di lereng perbukitan berikut: (1) Hutan ditebang menjadi lahan terbuka; (2) Hujan deras langsung menghantam dan mengikis lapisan tanah atas (humus); (3) Populasi rumput dan semak menurun drastis; (4) Populasi belalang, katak, dan cacing tanah ikut menyusut. Urutan peristiwa tersebut menggambarkan ...',
+     o:[
+       'perubahan komposisi komunitas yang hanya memengaruhi komponen abiotik tanpa mengubah aliran energi pada rantai makanan',
+       'interaksi kompetisi antar konsumen herbivora dan karnivora yang memicu terkikisnya lapisan tanah atas saat musim hujan',
+       'kemampuan ekosistem lereng melakukan pemulihan alami secara cepat melalui pencucian unsur hara oleh air hujan',
+       'dampak berantai hilangnya vegetasi yang memicu erosi lapisan tanah subur lalu mengganggu kestabilan jaring-jaring makanan'
+     ], a:3, e:'Kerusakan pada komponen produsen (pembukaan hutan) memicu gangguan interaksi abiotik (erosi tanah berhumus oleh air hujan) yang selanjutnya merambat ke konsumen I (belalang), konsumen II (katak), dan detritivor (cacing tanah) dalam jaring-jaring makanan.'},
+    {t:'mcq', q:'Di ekosistem kebun lereng ditemukan beberapa interaksi: (i) akar rumput hidup berdampingan dengan jamur mikoriza yang membantu penyerapan air dan mineral; (ii) benalu menyerap air dan zat makanan dari cabang pohon kopi hingga pohon itu kurus; (iii) burung kutilang memangsa ulat pemakan daun. Interaksi (i), (ii), dan (iii) secara berurutan adalah ...',
+     o:[
+       'simbiosis mutualisme, simbiosis parasitisme, serta interaksi predasi',
+       'simbiosis komensalisme, simbiosis parasitisme, serta interaksi kompetisi',
+       'simbiosis mutualisme, simbiosis komensalisme, serta interaksi herbivori',
+       'interaksi herbivori, simbiosis parasitisme, serta simbiosis mutualisme'
+     ], a:0, e:'Akar rumput dan jamur mikoriza saling menguntungkan (simbiosis mutualisme); benalu merugikan pohon kopi inangnya (simbiosis parasitisme); burung kutilang memangsa ulat (interaksi predasi).'},
+    {t:'mcq', q:'Mengapa penumpukan sampah plastik kemasan jajanan di tanah sekolah dapat mengganggu siklus materi (daur biogeokimia) di ekosistem tanah?',
+     o:[
+       'Polimer plastik mengikat seluruh gas oksigen di udara bebas sehingga daun tumbuhan di sekitarnya gagal berfotosintesis',
+       'Plastik sangat sulit diuraikan dekomposer, menghalangi infiltrasi air ke tanah, dan mikroplastiknya mengganggu cacing tanah serta mikroba',
+       'Bakteri dan jamur pengurai menghabiskan seluruh energinya untuk membusukkan plastik dalam waktu singkat sehingga serasah daun terabaikan',
+       'Lembaran plastik mempercepat pencucian unsur hara mineral ke lapisan batuan dasar melalui peningkatan resapan air hujan'
+     ], a:1, e:'Berbeda dengan serasah organik yang diuraikan dekomposer menjadi humus, polimer plastik tidak dapat dicerna oleh enzim pengurai, menghalangi peresapan air (siklus air) serta pertukaran gas di tanah, dan serpihan mikroplastiknya mengganggu biota tanah.'},
+    {t:'mcq', q:'Alih fungsi hutan secara besar-besaran menjadi lahan terbuka yang tererosi tidak hanya memicu longsor lokal, tetapi juga memperparah perubahan iklim. Keterkaitan kedua fenomena ini dalam daur karbon dan oksigen adalah ...',
+     o:[
+       'tanah yang tererosi menyerap terlalu banyak gas karbon dioksida dari udara sehingga suhu permukaan bumi menjadi tidak stabil',
+       'hilangnya pepohonan meningkatkan pelepasan uap air melalui transpirasi daun yang memicu efek rumah kaca di atmosfer',
+       'berkurangnya vegetasi menurunkan penyerapan karbon dioksida untuk fotosintesis, sementara kerusakan tanah berhumus melepas simpanan karbon',
+       'pembukaan lahan mempercepat pengikatan karbon oleh batuan induk di lereng sehingga kadar oksigen di atmosfer menurun drastis'
+     ], a:2, e:'Pepohonan dan lapisan tanah kaya humus merupakan penyimpan karbon alami (carbon sink). Pembukaan hutan dan erosi tanah menurunkan kapasitas penyerapan CO2 sekaligus melepaskan simpanan karbon ke atmosfer sehingga memperparah perubahan iklim.'},
+    {t:'mcq', q:'Dalam proyek EMILIE, kalian menganyam pita plastik kemasan jajanan dengan pola baling-baling berlubang (Jenis 1) dan menanam rumput di setiap selnya. Bagaimana kedua komponen pada Geocell tersebut saling melengkapi secara mekanis dan ekologis?',
+     o:[
+       'Pita plastik menutup seluruh pori tanah agar kedap air, sedangkan daun rumput mempercepat laju aliran limpasan permukaan',
+       'Simpul plastik menyediakan unsur hara mineral bagi tanah, sedangkan akar rumput menguraikan polimer plastik menjadi humus',
+       'Daun rumput menahan geseran panel plastik di lereng, sedangkan pita plastik menyerap air hujan untuk disalurkan ke akar',
+       'Dinding sel plastik menahan tanah dari gerusan limpasan awal, sementara tajuk dan akar serabut rumput meredam hujan serta mengikat tanah'
+     ], a:3, e:'Geocell memadukan rekayasa fisik dan fungsi ekologis: dinding sel anyaman plastik mengurung tanah agar tidak mudah hanyut oleh limpasan awal, sedangkan tajuk daun meredam erosi percik dan akar serabut meningkatkan kohesi tanah serta infiltrasi air.'},
+    {t:'mcq', q:'Sebuah kelompok merancang panel Geocell dengan batas maksimum bak P = 32 cm dan L = 23 cm, lebar pita/simpul s = 2 cm, serta sisi lubang sel a = 5 cm (diameter rumpun rumput d = 3,5 cm). Berapa jumlah lubang sel yang terbentuk dan bagaimana kesesuaiannya bagi pertumbuhan rumput?',
+     o:[
+       '12 lubang sel (4 x 3); sesuai karena ukuran lubang (5 cm) lebih besar daripada diameter rumpun (3,5 cm) sehingga rumput leluasa tumbuh',
+       '12 lubang sel (4 x 3); kurang sesuai karena selisih ukuran lubang dan rumpun (1,5 cm) terlalu lebar untuk menahan tanah di lereng',
+       '15 lubang sel (5 x 3); sesuai karena panjang 32 cm dibagi lebar lubang 5 cm menghasilkan 6 barisan simpul dan 5 lubang',
+       '20 lubang sel (5 x 4); kurang sesuai karena jumlah lubang yang terlalu banyak membuat pangkal rumpun rumput saling berhimpitan'
+     ], a:0, e:'n_p = lantai((32 - 2) / (5 + 2)) = lantai(30 / 7) = 4 lubang; n_l = lantai((23 - 2) / 7) = lantai(21 / 7) = 3 lubang; total N = 4 x 3 = 12 lubang sel. Ukuran a = 5 cm > d = 3,5 cm berada dalam rentang ideal (4-7 cm) yang memberi ruang tumbuh cukup sekaligus menahan tanah.'},
+    {t:'mcq', q:'Pada uji simulasi hujan buatan (volume air dituang = 400 ml pada masing-masing bak), model kontrol menghasilkan 280 ml air limpasan dan 45 g sedimen tanah, sedangkan model Geocell bervegetasi menghasilkan 80 ml air limpasan dan 9 g sedimen. Pernyataan yang tepat berdasarkan data tersebut adalah ...',
+     o:[
+       'Geocell bervegetasi menahan 20% air hujan (80/400) dan mengurangi 20% erosi sedimen (9/45) dibanding kontrol',
+       'Geocell bervegetasi menahan 80% air hujan untuk meresap ke tanah dan mengurangi 80% erosi sedimen dibanding kontrol',
+       'Model kontrol menahan 70% air hujan (280/400) sehingga lebih efektif menjaga kelembapan tanah bagi cacing tanah',
+       'Geocell bervegetasi mengurangi air yang meresap ke tanah sebesar 50% karena tertahan oleh dinding pita plastik kemasan'
+     ], a:1, e:'Air tertahan pada Geocell = ((400 - 80) / 400) x 100% = 80% (kontrol hanya (400 - 280)/400 = 30%). Pengurangan sedimen = ((45 - 9) / 45) x 100% = 80%. Artinya Geocell bervegetasi memperbesar infiltrasi air dan menyelamatkan 80% tanah berhumus dari erosi.'},
+    {t:'mcq', q:'Agar perbandingan hasil uji antara model lereng ber-Geocell rumput dan model lereng gundul (kontrol) dapat dipertanggungjawabkan secara ilmiah, faktor-faktor abiotik yang wajib dikendalikan (dibuat sama) adalah ...',
+     o:[
+       'volume air limpasan yang tertampung di wadah bawah serta massa endapan tanah kering setelah penyiraman selesai',
+       'keberadaan panel anyaman Geocell serta jumlah rumpun rumput yang ditanam pada kedua bak simulasi lereng',
+       'persentase pengurangan sedimen dan persentase air hujan yang meresap ke dalam pori-pori tanah pada kedua bak',
+       'kemiringan lereng, jenis dan massa tanah awal, volume air hujan buatan, ketinggian curahan, serta durasi penyiraman'
+     ], a:3, e:'Kemiringan lereng, jenis dan massa tanah, volume air, tinggi curahan, serta durasi penyiraman adalah variabel kontrol yang wajib dibuat sama. Adapun keberadaan Geocell bervegetasi adalah variabel bebas, sedangkan volume limpasan dan massa sedimen adalah variabel terikat.'}
+  ];
+
+  const SUM_TP = [1, 1, 2, 2, 2, 2, 3, 3, 4, 4];
+  const SUM_KB = {1:'KB 1-2', 2:'KB 1, 2, dan 6', 3:'KB 3', 4:'KB 4-5'};
+
+  const URAIAN = [
+    {q:'Di lereng perbukitan Semende Darat Tengah, keberadaan rumput, pepohonan, cacing tanah, dan jamur sangat dipengaruhi oleh tanah, air hujan, cahaya matahari, suhu, dan kemiringan lereng. Jelaskan hubungan timbal balik antara komponen biotik dan abiotik tersebut, serta berikan masing-masing dua contoh bagaimana komponen abiotik memengaruhi organisme dan bagaimana organisme mengubah kondisi abiotik di lereng!',
+     k:'Komponen biotik dan abiotik di lereng saling memengaruhi secara timbal balik dalam satu sistem ekologi. Contoh abiotik memengaruhi biotik: (1) cahaya matahari, air, dan unsur hara tanah menentukan laju fotosintesis serta pertumbuhan rumput/pohon (produsen), dan jika kurang akan menjadi faktor pembatas; (2) kelembapan dan suhu tanah memengaruhi kelangsungan hidup detritivor (cacing tanah) dan pengurai (jamur/bakteri). Contoh biotik memengaruhi abiotik: (1) tajuk dan akar serabut rumput meredam pukulan air hujan, memperlambat limpasan, memperbesar infiltrasi air ke dalam tanah, serta mengikat partikel tanah (meningkatkan kohesi) sehingga mencegah erosi; (2) cacing tanah menggemburkan pori tanah dan bersama jamur/bakteri menguraikan serasah menjadi humus yang meningkatkan kesuburan dan daya simpan air tanah.',
+     p:['Menjelaskan bahwa komponen biotik dan abiotik berinteraksi secara timbal balik (saling memengaruhi)','Memberikan minimal dua contoh pengaruh komponen abiotik (cahaya, air, tanah, suhu, topografi) terhadap organisme lereng','Memberikan contoh bagaimana vegetasi (akar/tajuk rumput dan pohon) mengubah kondisi abiotik (mengikat tanah/kohesi, memperbesar infiltrasi air, menahan erosi)','Memberikan contoh peran detritivor (cacing tanah) dan pengurai (jamur/bakteri) dalam memperbaiki struktur tanah dan membentuk humus']},
+    {q:'Analisis bagaimana alih fungsi hutan menjadi kebun terbuka di lereng curam Semende dan menumpuknya sampah plastik kemasan jajanan di lingkungan sekolah dapat mengganggu interaksi antar komponen ekosistem (baik interaksi abiotik, jaring-jaring makanan, maupun daur air dan karbon)!',
+     k:'(1) Alih fungsi hutan menghilangkan tutupan vegetasi (produsen). Tanpa kanopi dan akar pengikat, interaksi abiotik antara curah hujan tinggi dan lereng curam langsung menghantam tanah merah, menurunkan infiltrasi (mengganggu siklus air), meningkatkan limpasan permukaan, dan mengikis lapisan tanah atas berhumus hingga memicu erosi dan longsor. (2) Hilangnya produsen dan habitat merusak jaring-jaring makanan (konsumen herbivora dan predator kehilangan makanan/tempat hidup) serta mengurangi penyerapan CO2 dari atmosfer (memperparah perubahan iklim dalam siklus karbon). (3) Sampah plastik jajanan tidak dapat diuraikan oleh dekomposer; tumpukannya di tanah menghalangi resapan air dan cahaya, serta serpihan mikroplastiknya merusak struktur tanah dan mengganggu cacing tanah (detritivor) maupun mikroba pengurai sehingga daur unsur hara terhambat.',
+     p:['Menjelaskan dampak hilangnya vegetasi terhadap interaksi abiotik (hujan langsung menghantam lereng, infiltrasi turun, limpasan dan erosi/longsor meningkat)','Menjelaskan dampak kerusakan habitat dan hilangnya lapisan humus terhadap jaring-jaring makanan (produsen, konsumen, detritivor, pengurai)','Menjelaskan kaitan berkurangnya vegetasi dengan terganggunya siklus air dan siklus karbon (penyerapan CO2 turun / perubahan iklim)','Menjelaskan dampak sampah plastik/mikroplastik yang sulit terurai terhadap sifat fisik tanah, resapan air, dan kehidupan biota tanah']},
+    {q:'Dalam proyek EMILIE, kalian merancang Geocell menggunakan anyaman plastik kemasan pola baling-baling berlubang (Jenis 1, ukuran lubang sel sekitar 5 x 5 cm) dan menanam rumput di setiap selnya. Jelaskan bagaimana anyaman plastik dan rumput bekerja sama memulihkan interaksi ekosistem lereng, serta mengapa ukuran lubang sel yang terlalu sempit atau terlalu lebar dapat menggagalkan fungsi ekologis tersebut!',
+     k:'Dinding pita lipat 4 lapis dan simpul baling-baling bekerja secara mekanis mengurung tanah di dalam sel, meredam energi hantaman butir hujan (erosi percik), dan memperlambat aliran limpasan permukaan. Perlindungan awal ini memberi kesempatan bagi komponen biotik (rumput sebagai produsen) untuk beradaptasi: daunnya menutup permukaan tanah dan berfotosintesis, sementara akar serabutnya menembus tanah, meningkatkan kohesi partikel tanah, membuka pori infiltrasi air, dan menjaga lapisan humus tempat hidup detritivor serta pengurai. Ukuran lubang sel harus seimbang (trade-off): jika terlalu sempit (a <= diameter rumpun), ruang tumbuh, air, dan cahaya menjadi faktor pembatas yang menjepit dan mematikan rumput; jika terlalu lebar, kurungan sel melemah sehingga tanah berhumus tetap hanyut terkikis air hujan sebelum akar rumput tumbuh rapat.',
+     p:['Menjelaskan fungsi mekanis anyaman baling-baling (mengurung tanah di sel, meredam erosi percik, memperlambat limpasan)','Menjelaskan fungsi ekologis rumput dan akarnya (fotosintesis, meningkatkan kohesi tanah, memperbesar infiltrasi air, menjaga humus bagi biota tanah)','Menjelaskan dampak ekologis jika lubang terlalu sempit (ruang, cahaya, dan air menjadi faktor pembatas bagi pertumbuhan rumput)','Menjelaskan dampak jika lubang terlalu lebar (kurungan tanah lemah sehingga erosi humus tetap terjadi sebelum akar berkembang)']},
+    {q:'Pada uji simulasi hujan buatan, sebuah kelompok menuangkan 500 ml air pada masing-masing bak lereng. Pada model lereng gundul (kontrol), keluar 300 ml air limpasan dan terbawa 40 gram sedimen tanah. Pada model lereng ber-Geocell rumput, hanya keluar 50 ml air limpasan dan terbawa 10 gram sedimen. (a) Hitung persentase air yang tertahan pada model Geocell dan persentase pengurangan sedimen dibanding kontrol! (b) Jelaskan makna kedua angka tersebut bagi siklus air, kelestarian lapisan humus, dan kehidupan organisme tanah di lereng!',
+     k:'(a) Air yang tertahan pada model Geocell = 500 - 50 = 450 ml; Persentase air tertahan = (450 / 500) x 100% = 90% (sedangkan pada kontrol hanya (200/500) x 100% = 40%). Pengurangan sedimen = 40 - 10 = 30 gram; Persentase pengurangan sedimen = (30 / 40) x 100% = 75%. (b) Makna ekologis: 90% air tertahan berarti sebagian besar air hujan meresap (infiltrasi) ke dalam pori tanah dalam siklus air, sehingga mengurangi aliran permukaan perusak lereng dan menyediakan kelembapan tanah bagi akar rumput, cacing tanah (detritivor), dan mikroba pengurai. Pengurangan sedimen 75% berarti lapisan tanah atas (topsoil) yang kaya humus dan unsur hara tidak hanyut, sehingga kesuburan tanah untuk menopang produsen dan rantai makanan di lereng tetap lestari.',
+     p:['(a) Menghitung air tertahan pada Geocell dengan tepat: (500 - 50)/500 x 100% = 90%','(a) Menghitung pengurangan sedimen dengan tepat: (40 - 10)/40 x 100% = 75%','(b) Menjelaskan makna 90% air tertahan bagi peningkatan infiltrasi (siklus air) dan ketersediaan air/kelembapan bagi akar rumput serta biota tanah','(b) Menjelaskan makna 75% pengurangan sedimen bagi penyelamatan lapisan topsoil/humus dan keberlanjutan daur unsur hara bagi produsen']},
+    {q:'Seorang warga berpendapat: "Daripada repot menganyam sampah plastik, lebih baik semua bukit dibuka saja untuk kebun semusim, atau kalau mau pasang Geocell plastik di bukit biarkan saja plastiknya tertinggal selamanya di permukaan tanah." Evaluasilah pendapat tersebut berdasarkan konsep interaksi ekosistem dan penyebab mikroplastik (apa yang harus dilakukan jika Geocell plastik dipasang di lereng nyata), lalu tuliskan satu kalimat kampanye berbasis bukti!',
+     k:'Evaluasi berbasis bukti: (1) Membuka seluruh bukit tanpa tanaman penutup tanah memutus interaksi biotik-abiotik: kanopi dan akar hilang, infiltrasi air turun, limpasan mengikis lapisan humus, dan memicu longsor. Solusi berkelanjutan bagi petani adalah terasering, tanaman penutup tanah (rumput penguat lereng), dan agroforestri. (2) Membiarkan Geocell plastik terbuka selamanya di permukaan bukit berbahaya karena plastik tidak dapat diuraikan dekomposer dan akan rapuh menjadi mikroplastik akibat paparan sinar matahari langsung (fotodegradasi) serta gesekan fisik. Jika Geocell plastik dipasang pada lereng sebenarnya, cara mengatasi efek mikroplastiknya adalah: menimbun Geocell dengan tanah agar tidak terkena matahari langsung, menghindarkannya dari gesekan fisik, dan setelah rumput tumbuh baik serta akarnya kuat mengikat tanah, anyaman plastik wajib diangkat kembali (serta mengutamakan Reduce plastik sekali pakai). Contoh kalimat kampanye: "Akar rumput dan Geocell daur ulang terbukti menahan 75% erosi tanah: mari kurangi plastik sekali pakai dan hijaukan lereng sekitar kita demi bumi lestari!"',
+     p:['Mengevaluasi dampak pembukaan bukit tanpa konservasi serta mengusulkan jalan tengah berkelanjutan (terasering, rumput penutup tanah, agroforestri)','Menjelaskan bahwa Geocell harus ditimbun tanah agar tidak terkena sinar matahari langsung dan dijaga agar tidak terkena gesekan fisik pemicu mikroplastik','Menjelaskan bahwa setelah rumput tumbuh dengan baik dan akarnya kuat mengikat tanah, Geocell plastik perlu diangkat kembali karena tidak dapat terurai','Menyusun satu kalimat ajakan kampanye yang ringkas, berbasis bukti ekologis/proyek, dan mengajak aksi nyata (termasuk Reduce plastik)']},
+    {q:'Ketika melakukan uji simulasi hujan buatan, sebuah kelompok mendapati bahwa sedimen tanah pada model Geocell mereka hampir sama banyaknya dengan model kontrol, dan beberapa rumpun rumput ikut hanyut tercabut. Analisis dua penyebab (baik dari sisi interaksi biologis rumput-tanah maupun teknis anyaman) yang membuat fungsi ekosistem lereng mini tersebut belum berjalan, lalu usulkan perbaikannya!',
+     k:'Analisis penyebab: (1) Secara biologis (interaksi biotik-abiotik), rumput baru saja ditanam atau mengalami stres (kurang air/lubang sel terlalu sempit) sehingga akar serabutnya belum tumbuh menyebar mengikat partikel tanah (kohesi tanah masih rendah) dan belum menyatu dengan tanah di bawah panel; (2) Secara teknis-fisik, ukuran lubang sel terlalu lebar, tanah isian sel kurang padat, atau panel anyaman kurang menempel rapat dan kurang pasak pada permukaan lereng sehingga air limpasan mengalir di bawah panel (piping/undercutting) dan menggerus tanah beserta rumpun rumputnya. Usulan perbaikan: memastikan ukuran lubang sel ideal (a > d namun tidak terlalu lebar), memadatkan tanah di sekitar perakaran, menyiram dan memberi waktu beberapa minggu agar akar rumput tumbuh mencengkeram tanah lereng, serta merapatkan kuncian simpul baling-baling dan menambah pasak penambat di tepi panel.',
+     p:['Menganalisis penyebab biologis pada interaksi rumput dan tanah (akar serabut belum tumbuh mencengkeram tanah/kohesi rendah, atau rumput stres karena faktor pembatas)','Menganalisis penyebab teknis-abiotik (panel tidak menempel rapat sehingga air menggerus di bawah panel, lubang sel terlalu besar, atau tanah kurang padat)','Mengusulkan perbaikan yang memulihkan fungsi mekanis dan ekologis (merapatkan panel & pasak, mengatur ukuran sel, memadatkan media tanam, dan memberi waktu akar rumput tumbuh mengikat tanah)']}
+  ];
+
+  const quizBoxA = document.getElementById('quizBoxA');
+  const uraianBox = document.getElementById('uraianBox');
+  const sumres = document.getElementById('sumres');
+  const progTextA = document.getElementById('progTextA');
+  const progTextB = document.getElementById('progTextB');
+  const printModal = document.getElementById('printModal');
+  const inpNama = document.getElementById('inpNama');
+  const inpKelas = document.getElementById('inpKelas');
+  const modalErr = document.getElementById('modalErr');
+  const studentBanner = document.getElementById('studentBanner');
+  const outNama = document.getElementById('outNama');
+  const outKelas = document.getElementById('outKelas');
+  const wrapKelas = document.getElementById('wrapKelas');
+  const outWaktu = document.getElementById('outWaktu');
+
+  let stateA = null; // {s: score, t: total, flags: [...]}
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+    });
+  }
+
+  function fmt(x, d){
+    if (!isFinite(x)) return '-';
+    d = d == null ? 1 : d;
+    const r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+    let s = r.toFixed(d);
+    if (s.indexOf('.') > -1) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    return s.replace('.', ',');
+  }
+
+  function avgN(a){
+    const b = a.filter(function(x){ return isFinite(x); });
+    return b.length ? b.reduce(function(s, x){ return s + x; }, 0) / b.length : NaN;
+  }
+
+  function renderBagianA(){
+    let h = '';
+    Q_A.forEach(function(q, i){
+      h += '<div class="qc" data-i="' + i + '" id="qc-' + i + '"><p class="qs">' + (i + 1) + '. ' + q.q + '</p>';
+      q.o.forEach(function(o, k){
+        h += '<label class="opt"><input type="radio" name="s1-' + i + '" value="' + k + '"><span>' + o + '</span></label>';
+      });
+      h += '<div class="fb"></div></div>';
+    });
+    h += '<div class="warn-box" id="warnBoxA" role="alert"></div>';
+    h += '<div class="btns noprint">' +
+         '<button type="button" class="btn unready" id="btnCheckA" data-act="checkA">Periksa Jawaban</button>' +
+         '<button type="button" class="btn sec" id="btnResetA" data-act="resetA">Ulangi Bagian A</button>' +
+         '</div>';
+    h += '<div class="qscore" id="qScoreA" aria-live="polite"></div>';
+    quizBoxA.innerHTML = h;
+  }
+
+  function renderBagianB(){
+    uraianBox.innerHTML = URAIAN.map(function(u, i){
+      return '<div class="card" id="urcard-' + i + '">' +
+        '<p class="qs">' + (i + 1) + '. ' + u.q + '</p>' +
+        '<textarea rows="5" data-ur="' + i + '" placeholder="Tulis jawabanmu dengan kata-katamu sendiri..." aria-label="Jawaban uraian ' + (i + 1) + '"></textarea>' +
+        '<div class="print-ans" id="prans-' + i + '">-</div>' +
+        '<div class="btns noprint"><button type="button" class="btn sec" data-act="key" data-i="' + i + '">Lihat kunci jawaban</button></div>' +
+        '<div class="key hide" id="key-' + i + '">' +
+        '<div class="box fakta"><b>Kunci jawaban</b>' + u.k + '</div>' +
+        '<p class="small"><b>Centang poin yang sudah ada pada jawabanmu:</b></p>' +
+        u.p.map(function(p, j){
+          return '<label class="opt"><input type="checkbox" data-urc="' + i + '-' + j + '"><span>' + p + '</span></label>';
+        }).join('') +
+        '<p class="qscore" data-us="' + i + '"></p>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  function getUnansweredA(){
+    const missing = [];
+    Array.from(quizBoxA.querySelectorAll('.qc')).forEach(function(qc, i){
+      if (!qc.querySelector('input[type=radio]:checked')) missing.push(i + 1);
+    });
+    return missing;
+  }
+
+  function updateStatusA(){
+    const missing = getUnansweredA();
+    const answered = Q_A.length - missing.length;
+    progTextA.textContent = 'Terjawab: ' + answered + ' / ' + Q_A.length + ' soal';
+    const btnCheckA = document.getElementById('btnCheckA');
+    const warnBoxA = document.getElementById('warnBoxA');
+    if (missing.length === 0){
+      btnCheckA.classList.remove('unready');
+      warnBoxA.classList.remove('show');
+      warnBoxA.textContent = '';
+    } else {
+      btnCheckA.classList.add('unready');
+    }
+    Array.from(quizBoxA.querySelectorAll('.qc')).forEach(function(qc, idx){
+      if (missing.indexOf(idx + 1) === -1) qc.classList.remove('unanswered-hl');
+    });
+  }
+
+  function updateStatusB(){
+    const areas = Array.from(uraianBox.querySelectorAll('textarea[data-ur]'));
+    let filled = 0;
+    areas.forEach(function(ta, i){
+      const val = ta.value.trim();
+      if (val) filled++;
+      const pr = document.getElementById('prans-' + i);
+      if (pr) pr.textContent = val || '(Belum diisi)';
+    });
+    progTextB.textContent = 'Terisi: ' + filled + ' / ' + URAIAN.length + ' uraian';
+  }
+
+  function checkBagianA(){
+    const missing = getUnansweredA();
+    const warnBoxA = document.getElementById('warnBoxA');
+    const qcs = Array.from(quizBoxA.querySelectorAll('.qc'));
+
+    if (missing.length > 0){
+      qcs.forEach(function(qc, idx){
+        qc.classList.toggle('unanswered-hl', missing.indexOf(idx + 1) !== -1);
+      });
+      warnBoxA.innerHTML = '&#9888;&#65039; <b>Peringatan:</b> Kamu belum menjawab semua soal Bagian A! Silakan lengkapi dulu <b>Soal nomor ' + missing.join(', ') + '</b> (masih ada ' + missing.length + ' soal yang belum dijawab) agar tombol Periksa Jawaban dapat memproses nilaimu.';
+      warnBoxA.classList.add('show');
+      const firstMissing = document.getElementById('qc-' + (missing[0] - 1));
+      if (firstMissing) firstMissing.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    warnBoxA.classList.remove('show');
+    let score = 0;
+    const flags = [];
+    qcs.forEach(function(qc, i){
+      qc.classList.remove('unanswered-hl');
+      const q = Q_A[i];
+      const ch = qc.querySelector('input:checked');
+      const ok = ch && parseInt(ch.value, 10) === q.a ? 1 : 0;
+      Array.from(qc.querySelectorAll('.opt')).forEach(function(op, k){
+        op.classList.remove('ok', 'bad');
+        if (k === q.a) op.classList.add('ok');
+        else if (ch && parseInt(ch.value, 10) === k) op.classList.add('bad');
+      });
+      const fb = qc.querySelector('.fb');
+      fb.className = 'fb ' + (ok === 1 ? 'ok' : 'bad');
+      fb.innerHTML = (ok === 1 ? '<b>Tepat.</b> ' : '<b>Belum tepat.</b> ') + (q.e || '') + (ok !== 1 ? ' <b>Jawaban tepat: ' + q.o[q.a] + '</b>' : '');
+      score += ok;
+      flags.push(ok);
+    });
+
+    const n = Q_A.length, pct = Math.round(score / n * 100);
+    const scEl = document.getElementById('qScoreA');
+    scEl.textContent = 'Skor: ' + fmt(score, 1) + ' dari ' + n + ' (' + pct + '%). ' + (pct >= 85 ? 'Sangat baik!' : pct >= 60 ? 'Bagus. Periksa kembali bagian yang masih keliru.' : 'Pelajari lagi materinya, lalu coba ulangi.');
+    stateA = {s: score, t: n, f: flags};
+    updateSum();
+    scEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function resetBagianA(){
+    Array.from(quizBoxA.querySelectorAll('input[type=radio]')).forEach(function(r){ r.checked = false; });
+    Array.from(quizBoxA.querySelectorAll('.opt')).forEach(function(o){ o.classList.remove('ok', 'bad'); });
+    Array.from(quizBoxA.querySelectorAll('.qc')).forEach(function(qc){ qc.classList.remove('unanswered-hl'); });
+    Array.from(quizBoxA.querySelectorAll('.fb')).forEach(function(f){ f.className = 'fb'; f.innerHTML = ''; });
+    document.getElementById('qScoreA').textContent = '';
+    const warnBoxA = document.getElementById('warnBoxA');
+    warnBoxA.classList.remove('show');
+    warnBoxA.textContent = '';
+    stateA = null;
+    updateStatusA();
+    updateSum();
+  }
+
+  function updateSum(){
+    const pg = stateA && stateA.t ? (stateA.s / stateA.t * 100) : null;
+    let sum = 0, any = false;
+    URAIAN.forEach(function(u, i){
+      const keyEl = document.getElementById('key-' + i);
+      const revealed = keyEl && !keyEl.classList.contains('hide');
+      const c = Array.from(uraianBox.querySelectorAll('input[data-urc^="' + i + '-"]')).filter(function(x){ return x.checked; }).length;
+      const sc = uraianBox.querySelector('[data-us="' + i + '"]');
+      if (revealed){
+        any = true;
+        const s4 = c / u.p.length * 4;
+        sum += s4;
+        if (sc) sc.textContent = 'Skor soal ini: ' + fmt(s4, 1) + ' dari 4';
+      } else if (sc){
+        sc.textContent = '';
+      }
+    });
+    const ur = any ? (sum / (URAIAN.length * 4) * 100) : null;
+
+    if (pg === null && ur === null){
+      sumres.innerHTML = '<p class="small">Selesaikan Bagian A (tekan "Periksa Jawaban") dan Bagian B (centang poin kunci) untuk melihat nilai usulanmu.</p>';
+      return;
+    }
+
+    let h = '<div class="res">';
+    if (pg !== null) h += '<div><b>' + fmt(pg, 0) + '</b><span>Bagian A (pilihan ganda)</span></div>';
+    if (ur !== null) h += '<div><b>' + fmt(ur, 0) + '</b><span>Bagian B (uraian, penilaian diri)</span></div>';
+    let fin = null;
+    if (pg !== null && ur !== null){
+      fin = 0.4 * pg + 0.6 * ur;
+      h += '<div><b>' + fmt(fin, 0) + '</b><span>Nilai usulan (40% A + 60% B)</span></div>';
+    }
+    h += '</div>';
+
+    if (stateA && stateA.f){
+      const per = {};
+      stateA.f.forEach(function(f, i){
+        const t = SUM_TP[i];
+        (per[t] = per[t] || []).push(f);
+      });
+      const weak = Object.keys(per).filter(function(t){ return avgN(per[t]) < 0.6; }).map(function(t){
+        return 'TP ' + t + ' (ulangi ' + SUM_KB[t] + ')';
+      });
+      h += weak.length
+        ? '<div class="box tip"><b>Tindak lanjut (remedial)</b>Bagian A menunjukkan perlunya mengulang: ' + weak.join('; ') + '. Pelajari kembali materinya, kerjakan ulang Cek Pemahaman, lalu minta bimbingan gurumu.</div>'
+        : '<div class="box fakta"><b>Tindak lanjut (pengayaan)</b>Pemahamanmu pada Bagian A sudah baik. Tantangan lanjutan: ulangi uji Geocell pada minggu ke-2 dan ke-4, lalu bandingkan hasilnya, atau ajak kelompok lain menyempurnakan rancangan.</div>';
+    }
+    if (fin !== null){
+      h += '<p class="small">Kriteria ketercapaian ditetapkan gurumu (misalnya 75). Nilai ini adalah usulan; guru tetap menilai jawaban uraian dengan rubrik.</p>';
+    }
+    sumres.innerHTML = h;
+  }
+
+  function resetAll(){
+    resetBagianA();
+    Array.from(uraianBox.querySelectorAll('textarea[data-ur]')).forEach(function(ta){ ta.value = ''; });
+    Array.from(uraianBox.querySelectorAll('input[type=checkbox]')).forEach(function(cb){ cb.checked = false; });
+    Array.from(uraianBox.querySelectorAll('.key')).forEach(function(k){ k.classList.add('hide'); });
+    Array.from(uraianBox.querySelectorAll('button[data-act="key"]')).forEach(function(b){ b.textContent = 'Lihat kunci jawaban'; });
+    updateStatusB();
+    updateSum();
+    document.getElementById('scrollArea').scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function openPrintModal(){
+    modalErr.classList.remove('show');
+    printModal.classList.add('open');
+    setTimeout(function(){ inpNama.focus(); }, 50);
+  }
+
+  function closePrintModal(){
+    printModal.classList.remove('open');
+  }
+
+  function confirmPrint(){
+    const nama = inpNama.value.trim();
+    const kelas = inpKelas.value.trim();
+    if (!nama){
+      modalErr.classList.add('show');
+      inpNama.focus();
+      return;
+    }
+    outNama.textContent = nama;
+    if (kelas){
+      outKelas.textContent = kelas;
+      wrapKelas.style.display = '';
+    } else {
+      wrapKelas.style.display = 'none';
+    }
+    outWaktu.textContent = new Date().toLocaleString('id-ID', {
+      day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+    });
+    updateStatusB();
+    studentBanner.classList.add('show');
+    closePrintModal();
+    setTimeout(function(){ window.print(); }, 150);
+  }
+
+  renderBagianA();
+  renderBagianB();
+  updateStatusA();
+  updateStatusB();
+
+  quizBoxA.addEventListener('change', updateStatusA);
+  quizBoxA.addEventListener('click', function(e){
+    const b = e.target.closest('button[data-act]');
+    if (!b) return;
+    if (b.dataset.act === 'checkA') checkBagianA();
+    else if (b.dataset.act === 'resetA') resetBagianA();
+  });
+
+  uraianBox.addEventListener('input', function(e){
+    if (e.target.matches('textarea[data-ur]')) updateStatusB();
+  });
+  uraianBox.addEventListener('change', function(e){
+    if (e.target.matches('input[data-urc]')) updateSum();
+  });
+  uraianBox.addEventListener('click', function(e){
+    const b = e.target.closest('button[data-act="key"]');
+    if (!b) return;
+    const k = document.getElementById('key-' + b.dataset.i);
+    if (!k) return;
+    k.classList.toggle('hide');
+    b.textContent = k.classList.contains('hide') ? 'Lihat kunci jawaban' : 'Sembunyikan kunci jawaban';
+    updateSum();
+  });
+
+  document.getElementById('btnResetAll').addEventListener('click', resetAll);
+  document.getElementById('btnPrintAll').addEventListener('click', openPrintModal);
+  document.getElementById('btnCancelPrint').addEventListener('click', closePrintModal);
+  document.getElementById('btnConfirmPrint').addEventListener('click', confirmPrint);
+  inpNama.addEventListener('input', function(){
+    if (inpNama.value.trim()) modalErr.classList.remove('show');
+  });
+  printModal.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closePrintModal();
+    else if (e.key === 'Enter'){
+      e.preventDefault();
+      confirmPrint();
+    }
+  });
+})();
+</script>
+</body>
+</html>
